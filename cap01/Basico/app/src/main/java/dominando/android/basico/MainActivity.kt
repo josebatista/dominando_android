@@ -1,10 +1,9 @@
 package dominando.android.basico
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,11 +11,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val edtTexto = findViewById<EditText>(R.id.editTexto)
-        val button = findViewById<Button>(R.id.buttonToast)
-
-        button.setOnClickListener {
-            val texto = edtTexto.text.toString()
+        buttonToast.setOnClickListener {
+            val texto = editTexto.text.toString()
             Toast.makeText(this, texto, Toast.LENGTH_SHORT).show()
         }
 
