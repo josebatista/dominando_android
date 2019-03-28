@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Basico</string>
     <string name="main_button_toast">Exibir Toast</string>
+    <string name="main_button_tela2">Tela 2</string>
 </resources>

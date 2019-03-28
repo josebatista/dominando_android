@@ -1,5 +1,6 @@
 package dominando.android.basico
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,5 +17,9 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, texto, Toast.LENGTH_SHORT).show()
         }
 
+        buttonTela2.setOnClickListener {
+            val intent = Intent(this, Tela2Activity::class.java)
+            startActivity(intent)
+        }
     }
 }
