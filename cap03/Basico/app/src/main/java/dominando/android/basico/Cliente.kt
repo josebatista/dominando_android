@@ -1,31 +1,15 @@
 package dominando.android.basico
 
-import android.os.Parcel
-import android.os.Parcelable
+import org.parceler.Parcel
 
-class Cliente(var codigo: Int, var nome: String) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString()
-    ) {
-    }
+@Parcel
+class Cliente(var codigo: Int = 0, var nome: String = "")
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(codigo)
-        parcel.writeString(nome)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Cliente> {
-        override fun createFromParcel(parcel: Parcel): Cliente {
-            return Cliente(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Cliente?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+/*
+ * OUTRA IMPLEMENTACAO DA CLASSE QUE TERIA O MESMO EFEITO
+ *
+ * @Parcel
+ * class Cliente(var codigo: Int, var nome: String) {
+ *      @ParcelConstructor constructor: this(0, "")
+ * }
+ */
