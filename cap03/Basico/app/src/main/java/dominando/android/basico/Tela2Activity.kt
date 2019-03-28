@@ -17,7 +17,8 @@ class Tela2Activity : AppCompatActivity() {
 //        val cliente = intent.getParcelableExtra<Cliente>("cliente")
         val cliente = Parcels.unwrap<Cliente?>(intent.getParcelableExtra("cliente"))
 
-        val pessoa = intent.getSerializableExtra("pessoa") as Pessoa? //o objeto pessoa pode ser nulo
+//        val pessoa = intent.getSerializableExtra("pessoa") as Pessoa? //o objeto pessoa pode ser nulo
+        val pessoa = intent.getParcelableExtra<Pessoa>("pessoa")
 
         textMensagem.text = if (cliente != null) {
             getString(R.string.tela2_texto1, cliente.nome, cliente.codigo)
