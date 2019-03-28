@@ -1,7 +1,7 @@
 package dominando.android.basico
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_tela2.*
 
 class Tela2Activity : AppCompatActivity() {
@@ -12,8 +12,12 @@ class Tela2Activity : AppCompatActivity() {
 
         val nome = intent.getStringExtra("nome")
         val idade = intent.getIntExtra("idade", -1)
+        val cliente = intent.getParcelableExtra<Cliente>("cliente")
 
-        textMensagem.text = "Nome: $nome / Idade: $idade"
-
+        textMensagem.text = if (cliente != null) {
+            "Nome: ${cliente.nome} / Código: ${cliente.codigo}"
+        } else {
+            "Nome: $nome / Idade: $idade"
+        }
     }
 }
