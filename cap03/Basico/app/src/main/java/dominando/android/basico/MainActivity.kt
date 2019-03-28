@@ -30,5 +30,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("cliente", cliente)
             startActivity(intent)
         }
+
+        buttonSerializable.setOnClickListener {
+            val intent = Intent(this, Tela2Activity::class.java)
+            intent.putExtra("pessoa", Pessoa("José", 31))
+            startActivity(intent)
+        }
     }
 }

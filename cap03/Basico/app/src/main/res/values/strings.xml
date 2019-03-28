@@ -3,4 +3,5 @@
     <string name="main_button_toast">Exibir Toast</string>
     <string name="main_button_tela2">Tela 2</string>
     <string name="main_button_parcel">Parcelable via Intent</string>
+    <string name="main_button_serializable">Serializable via Intent</string>
 </resources>
