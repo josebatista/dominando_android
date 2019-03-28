@@ -16,11 +16,11 @@ class Tela2Activity : AppCompatActivity() {
         val pessoa = intent.getSerializableExtra("pessoa") as Pessoa? //o objeto pessoa pode ser nulo
 
         textMensagem.text = if (cliente != null) {
-            "Nome: ${cliente.nome} / Código: ${cliente.codigo}"
+            getString(R.string.tela2_texto1, cliente.nome, cliente.codigo)
         } else if (pessoa != null) {
-            "Nome: ${pessoa.nome} / Idade: ${pessoa.idade}"
+            getString(R.string.tela2_texto2, pessoa.nome, pessoa.idade)
         } else {
-            "Nome: $nome / Idade: $idade"
+            getString(R.string.tela2_texto2, nome, idade)
         }
     }
 }
