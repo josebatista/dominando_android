@@ -16,4 +16,6 @@
     </string-array>
 
     <string name="error_intent">Ação não suportada</string>
+    <string name="custom_action1">Ação customizada 1.</string>
+    <string name="custom_action2">Ação customizada 2.\nUri: %1$s\nHost: %2$s\nPath: %3$s</string>
 </resources>

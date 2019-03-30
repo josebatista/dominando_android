@@ -110,7 +110,8 @@ class MainActivity : AppCompatActivity() {
                 openIntent(intent)
             }
             9 -> { //Acao customizada 2
-                intent = Intent("produto://Notebook/Slim")
+                uri = Uri.parse("produto://Notebook/Slim")
+                intent = Intent(Intent.ACTION_VIEW, uri)
                 openIntent(intent)
             }
             else -> finish()
