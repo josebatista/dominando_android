@@ -2,6 +2,7 @@ package dominando.android.intents
 
 import android.app.SearchManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +33,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun callNumber() {
+        val uri = Uri.parse("tel:999887766")
+        intent = Intent(Intent.ACTION_CALL, uri)
+        openIntent(intent)
+    }
+
     private fun openIntentAtPosition(position: Int) {
 
         val uri: Uri?
@@ -43,9 +51,16 @@ class MainActivity : AppCompatActivity() {
                 openIntent(intent)
             }
             1 -> { //Realiza uma chamada
-                uri = Uri.parse("tel:999887766")
-                intent = Intent(Intent.ACTION_DIAL, uri)
-                openIntent(intent)
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CALL_PHONE
+                    )
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CALL_PHONE), 0)
+                } else {
+                    callNumber()
+                }
             }
             2 -> { //Pesquisa uma posicao no mapa
                 //Seu emulador/aparelho deve ter o Google Maps
@@ -99,6 +114,13 @@ class MainActivity : AppCompatActivity() {
                 openIntent(intent)
             }
             else -> finish()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+            callNumber()
         }
     }
 
