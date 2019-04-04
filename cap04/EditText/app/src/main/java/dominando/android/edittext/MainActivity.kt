@@ -1,6 +1,8 @@
 package dominando.android.edittext
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -19,6 +21,62 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
+
+        edtCep.addTextChangedListener(
+            object : TextWatcher {
+                var isUpdating = false
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    //Quando o texto é alterado o onTextChanged é chamado
+                    // Essa flag evita a chamada infinita desse método
+                    if (isUpdating) {
+                        isUpdating = false
+                        return
+                    }
+
+                    //Ao apagar o texto, a máscara é removida, então o posicionamento
+                    //do cursor precisa saber se o texto atual tinha ou não máscara
+                    val hasMask = s.toString().indexOf('.') > -1 || s.toString().indexOf('-') > -1
+
+                    //Remove '.' e '-' da String
+                    var str = s.toString().filterNot { it == '.' || it == '-' }
+
+                    //Os parâmetros before e count dizem o tamanho
+                    //anterior e atual da String digitada, se count > before é
+                    //porque está digitando, caso contrário, está apagando
+                    if (count > before) {
+                        if (str.length > 5) {
+                            //Se tem mais de 5 caracteres (sem máscara) coloca o '.' e o '-'
+                            str = "${str.substring(0, 2)}.${str.substring(2, 5)}-${str.substring(5)}"
+                        } else if (str.length > 2) {
+                            //Se tem mais que 2, coloca só o ponto
+                            str = "${str.substring(0, 2)}.${str.substring(2)}"
+                        }
+
+                        //Seta a flag para evitar chamada infinita
+                        isUpdating = true
+
+                        //Seta o novo texto
+                        edtCep.setText(str)
+
+                        //Seta a posição do cursor
+                        edtCep.setSelection(edtCep.text?.length ?: 0)
+                    } else {
+                        isUpdating = true
+                        edtCep.setText(str)
+
+                        //Se estiver apagando posiciona o cursor no local correto
+                        //Isso trata a deleção dos caracteres da máscara
+                        edtCep.setSelection(0, Math.min(if (hasMask) start - before else start, str.length))
+                    }
+                }
+            }
+        )
     }
 
     fun registerUser() {
