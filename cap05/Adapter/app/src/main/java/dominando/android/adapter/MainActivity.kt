@@ -11,6 +11,22 @@ class MainActivity : AppCompatActivity() {
         Vehicle("Onix", 2018, 1, true, true),
         Vehicle("Uno", 2007, 2, true, false),
         Vehicle("Del Rey", 1988, 3, false, true),
+        Vehicle("Gol", 2014, 0, true, true),
+        Vehicle("Onix", 2018, 1, true, true),
+        Vehicle("Uno", 2007, 2, true, false),
+        Vehicle("Del Rey", 1988, 3, false, true),
+        Vehicle("Gol", 2014, 0, true, true),
+        Vehicle("Onix", 2018, 1, true, true),
+        Vehicle("Uno", 2007, 2, true, false),
+        Vehicle("Del Rey", 1988, 3, false, true),
+        Vehicle("Gol", 2014, 0, true, true),
+        Vehicle("Onix", 2018, 1, true, true),
+        Vehicle("Uno", 2007, 2, true, false),
+        Vehicle("Del Rey", 1988, 3, false, true),
+        Vehicle("Gol", 2014, 0, true, true),
+        Vehicle("Onix", 2018, 1, true, true),
+        Vehicle("Uno", 2007, 2, true, false),
+        Vehicle("Del Rey", 1988, 3, false, true),
         Vehicle("Gol", 2014, 0, true, true)
     )
 
