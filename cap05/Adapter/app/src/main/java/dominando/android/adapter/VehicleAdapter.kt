@@ -42,11 +42,10 @@ class VehicleAdapter(
     }
 
     @StringRes
-    private fun getFuel(vehicle: Vehicle): Int {
+    private fun getFuel(vehicle: Vehicle): Int =
         if (vehicle.gasoline && vehicle.ethanol) R.string.fuel_flex
-        else if(vehicle.gasoline) R.string.fuel_gasoline
-        else if(vehicle.ethanol) R.string.fuel_ethanol
+        else if (vehicle.gasoline) R.string.fuel_gasoline
+        else if (vehicle.ethanol) R.string.fuel_ethanol
         else R.string.fuel_invalid
-    }
 
 }
