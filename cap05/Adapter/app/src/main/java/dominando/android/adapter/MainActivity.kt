@@ -7,6 +7,7 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,9 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val listView = ListView(this)
-        setContentView(listView)
+        setContentView(R.layout.activity_main)
+        listView.emptyView = findViewById(android.R.id.empty)
         val adapter = VehicleAdapter(this, vehicles)
         listView.adapter = adapter
 
@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
             if (vehicle != null) {
                 val (model, year) = vehicle
                 Toast.makeText(this, "$model $year", Toast.LENGTH_SHORT).show()
+                vehicles.remove(vehicle)
+                adapter.notifyDataSetChanged()
+                txtFooter.text = resources.getQuantityString(R.plurals.footer_text, adapter.count, adapter.count)
             }
         }
     }
