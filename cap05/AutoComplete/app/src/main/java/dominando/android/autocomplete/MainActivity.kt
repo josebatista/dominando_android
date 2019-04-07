@@ -1,7 +1,6 @@
 package dominando.android.autocomplete
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
             "Santos",
             "Santa Cruz"
         )
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, cities)
+        val adapter = CitySearchAdapter(this, android.R.layout.simple_dropdown_item_1line, cities)
 
         actCities.setAdapter(adapter)
     }
