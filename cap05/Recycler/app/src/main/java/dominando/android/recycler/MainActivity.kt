@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         rvMessages.layoutManager = layoutManager
+        initSwipeGesture()
     }
 
     private fun addMessage() {
@@ -50,4 +53,27 @@ class MainActivity : AppCompatActivity() {
         val s = "${message.title}\n${message.text}"
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
     }
+
+    private fun initSwipeGesture() {
+        val swipe = object : ItemTouchHelper.SimpleCallback(
+            0, //Posicoes permitidas para mover a view. Zero = nenhuma
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT //Posicoes do swipe
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                messages.removeAt(position)
+                adapter.notifyItemRemoved(position)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipe)
+        itemTouchHelper.attachToRecyclerView(rvMessages)
+    }
+
 }
