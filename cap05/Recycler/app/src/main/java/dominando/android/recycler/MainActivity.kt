@@ -17,10 +17,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        lastCustomNonConfigurationInstance.let { savedMessages ->
+            if (savedMessages is MutableList<*>) {
+                messages.addAll(savedMessages.filterIsInstance(Message::class.java))
+            }
+        }
+
         initRecyclerView()
         fabAdd.setOnClickListener {
             addMessage()
         }
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): Any {
+        return messages
     }
 
     private fun initRecyclerView() {
