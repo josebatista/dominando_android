@@ -20,7 +20,7 @@
 
     <style name="AppButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/selector_button</item>
-        <item name="android:textColor">@color/app_white</item>
+        <item name="android:textColor">@drawable/selector_button_text</item>
     </style>
 
 </resources>
