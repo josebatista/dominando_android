@@ -25,5 +25,11 @@
         android:background="@drawable/balao"
         android:text="Texto usando match_parent" />
 
+    <TextView
+        style="@style/MyStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView com Estilo" />
+
 
 </LinearLayout>

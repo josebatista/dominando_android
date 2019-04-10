@@ -6,6 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textColor">@color/app_red</item>
+    </style>
+
+    <style name="MyStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/app_white</item>
+        <item name="android:background">@color/app_black</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
 </resources>
