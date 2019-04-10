@@ -9,6 +9,7 @@
 
         <item name="android:textColor">@color/app_red</item>
         <item name="buttonStyle">@style/AppButton</item>
+        <item name="radioButtonStyle">@style/AppRadio</item>
     </style>
 
     <style name="MyStyle">
@@ -21,6 +22,10 @@
     <style name="AppButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/selector_button</item>
         <item name="android:textColor">@drawable/selector_button_text</item>
+    </style>
+
+    <style name="AppRadio" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/selector_radio</item>
     </style>
 
 </resources>
