@@ -1,0 +1,19 @@
+<html>
+<head>
+    <script type="text/javascript">
+            function showAndroidToast(s, t) {
+                window.dominando.showToast(s,t);
+            }
+
+    </script>
+</head>
+
+<body>
+<h1>Formulário HTML</h1>
+<form name="meuForm">
+    Nome: <input type="text" name="txtName"/><br/>
+    Idade: <input type="text" name="txtAge"/><br/>
+    <input type="button" onclick="showAndroidToast(txtName.value, txtAge.value);" value="Enviar"/>
+</form>
+</body>
+</html>
