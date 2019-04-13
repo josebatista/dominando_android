@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 
@@ -13,6 +15,12 @@ class JogoDaVelha @JvmOverloads constructor(
     style: Int = 0
 ) : View(context, attrs, style) {
 
+    interface JogoDaVelhaListener {
+        fun fimDeJogo(vencedor: Int)
+    }
+
+    var listener: JogoDaVelhaListener? = null
+
     private var tamanho: Int = 0
     private var vez: Int = XIS
     private var tabuleiro = Array(3) { IntArray(3) }
@@ -20,6 +28,7 @@ class JogoDaVelha @JvmOverloads constructor(
     private lateinit var paint: Paint
     private lateinit var imageX: Bitmap
     private lateinit var imageO: Bitmap
+    private lateinit var detector: GestureDetector
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -27,6 +36,11 @@ class JogoDaVelha @JvmOverloads constructor(
         paint.style = Paint.Style.FILL
         imageX = BitmapFactory.decodeResource(resources, R.drawable.x_mark)
         imageO = BitmapFactory.decodeResource(resources, R.drawable.o_mark)
+        detector = GestureDetector(context, VelhaTouchListener())
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return detector.onTouchEvent(event)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -81,9 +95,77 @@ class JogoDaVelha @JvmOverloads constructor(
         }
     }
 
+    private fun gameOver(): Int {
+        //HORIZONTAIS
+        if (ganhou(tabuleiro[0][0], tabuleiro[0][1], tabuleiro[0][2])) {
+            return tabuleiro[0][0]
+        }
+        if (ganhou(tabuleiro[1][0], tabuleiro[1][1], tabuleiro[1][2])) {
+            return tabuleiro[1][0]
+        }
+        if (ganhou(tabuleiro[2][0], tabuleiro[2][1], tabuleiro[2][2])) {
+            return tabuleiro[2][0]
+        }
+
+        //VERTICAIS
+        if (ganhou(tabuleiro[0][0], tabuleiro[1][0], tabuleiro[2][0])) {
+            return tabuleiro[0][0]
+        }
+        if (ganhou(tabuleiro[0][1], tabuleiro[1][1], tabuleiro[2][1])) {
+            return tabuleiro[0][1]
+        }
+        if (ganhou(tabuleiro[0][2], tabuleiro[1][2], tabuleiro[2][2])) {
+            return tabuleiro[0][2]
+        }
+
+        //DIAGONAIS
+        if (ganhou(tabuleiro[0][0], tabuleiro[1][1], tabuleiro[2][2])) {
+            return tabuleiro[0][0]
+        }
+        if (ganhou(tabuleiro[0][2], tabuleiro[1][1], tabuleiro[2][0])) {
+            return tabuleiro[0][2]
+        }
+
+        //EXISTE ESPACOS VAZIOS
+        if (tabuleiro.flatMap { it.asList() }.any { it == VAZIO }) {
+            return VAZIO
+        }
+        return EMPATE
+    }
+
+    private fun ganhou(a: Int, b: Int, c: Int) = (a == b && b == c && a != VAZIO)
+
+    inner class VelhaTouchListener : GestureDetector.SimpleOnGestureListener() {
+        override fun onDown(e: MotionEvent?): Boolean {
+            return true
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            var vencedor = gameOver()
+            if (e?.action == MotionEvent.ACTION_UP && vencedor == VAZIO) {
+                val quadrante = tamanho / 3
+                val linha = (e.y / quadrante).toInt()
+                val coluna = (e.x / quadrante).toInt()
+                if (tabuleiro[linha][coluna] == VAZIO) {
+                    tabuleiro[linha][coluna] = vez
+                    vez = if (vez == XIS) BOLA else XIS
+                    invalidate()
+                    vencedor = gameOver()
+                    if (vencedor != VAZIO) {
+                        listener?.fimDeJogo(vencedor)
+                    }
+                    return true
+                }
+            }
+            return super.onSingleTapUp(e)
+        }
+    }
+
     companion object {
         const val XIS = 1
         const val BOLA = 2
+        const val VAZIO = 0
+        const val EMPATE = 3
     }
 
 }
