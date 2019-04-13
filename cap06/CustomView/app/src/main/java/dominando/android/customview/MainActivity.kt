@@ -10,11 +10,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        jogoDaVelha.listener = object : JogoDaVelha.JogoDaVelhaListener {
+        jogoDaVelha.listener = object : JogoDaVelhaView.JogoDaVelhaListener {
             override fun fimDeJogo(vencedor: Int) {
                 val message = when (vencedor) {
-                    JogoDaVelha.XIS -> "X venceu"
-                    JogoDaVelha.BOLA -> "O venceu"
+                    JogoDaVelhaView.XIS -> "X venceu"
+                    JogoDaVelhaView.BOLA -> "O venceu"
                     else -> "Empatou"
                 }
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()

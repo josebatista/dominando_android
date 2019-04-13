@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <dominando.android.customview.JogoDaVelha
+    <dominando.android.customview.JogoDaVelhaView
         android:id="@+id/jogoDaVelha"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
