@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:jbp="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/meuLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <dominando.android.customview.JogoDaVelhaView
+        android:id="@+id/jogoDaVelha"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        jbp:corDaBarra="#FF0000"
+        jbp:larguraDaBarra="10dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Reiniciar" />
+
+</LinearLayout>
