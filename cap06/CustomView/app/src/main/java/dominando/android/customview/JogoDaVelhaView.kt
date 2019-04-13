@@ -23,6 +23,9 @@ class JogoDaVelhaView @JvmOverloads constructor(
 
     var listener: JogoDaVelhaListener? = null
 
+    var corDaBarra: Int
+    var larguraBarra: Float
+
     private var tamanho: Int = 0
     private var vez: Int = XIS
     private var tabuleiro = Array(3) { IntArray(3) }
@@ -31,6 +34,12 @@ class JogoDaVelhaView @JvmOverloads constructor(
     private lateinit var imageX: Bitmap
     private lateinit var imageO: Bitmap
     private lateinit var detector: GestureDetector
+
+    init {
+        val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.JogoDaVelhaView)
+        corDaBarra = styledAttrs.getColor(R.styleable.JogoDaVelhaView_corDaBarra, Color.BLACK)
+        larguraBarra = styledAttrs.getDimension(R.styleable.JogoDaVelhaView_larguraDaBarra, 3F)
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -71,8 +80,8 @@ class JogoDaVelhaView @JvmOverloads constructor(
         val tamanhoF = tamanho.toFloat()
 
         //desenhando linhas
-        paint.color = Color.BLACK
-        paint.strokeWidth = 3F
+        paint.color = corDaBarra
+        paint.strokeWidth = larguraBarra
 
         //verticais
         canvas?.drawLine(quadrante, 0F, quadrante, tamanhoF, paint)

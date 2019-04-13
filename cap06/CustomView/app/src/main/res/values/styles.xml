@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <declare-styleable name="JogoDaVelhaView">
+        <attr name="corDaBarra" format="color" />
+        <attr name="larguraDaBarra" format="dimension" />
+    </declare-styleable>
+
 </resources>
