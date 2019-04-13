@@ -95,6 +95,11 @@ class JogoDaVelha @JvmOverloads constructor(
         }
     }
 
+    fun reiniciarJogo() {
+        tabuleiro = Array(3) { IntArray(3) }
+        invalidate()
+    }
+
     private fun gameOver(): Int {
         //HORIZONTAIS
         if (ganhou(tabuleiro[0][0], tabuleiro[0][1], tabuleiro[0][2])) {
