@@ -11,10 +11,30 @@ class HotelActivity : AppCompatActivity(), HotelListFragment.OnHotelClickListene
     }
 
     override fun onHotelClick(hotel: Hotel) {
-        showDetailsActivity(hotel.id)
+        if (isTablet()) {
+            showDetailsFragment(hotel.id)
+        } else if (isSmartphne()) {
+            showDetailsActivity(hotel.id)
+        }
     }
 
     private fun showDetailsActivity(hotelId: Long) {
         HotelDetailsActivity.open(this, hotelId)
     }
+
+    private fun showDetailsFragment(hotelId: Long) {
+        val fragment = HotelDetailsFragment.newInstance(hotelId)
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.details, fragment, HotelDetailsFragment.TAG_DETAILS)
+            .commit()
+    }
+
+//    private fun isTablet() = findViewById<View>(R.id.details) != null
+
+    //forma mais elegante de verificar se é um tablet
+    private fun isTablet() = resources.getBoolean(R.bool.tablet)
+
+    private fun isSmartphne() = resources.getBoolean(R.bool.smartphone)
 }
