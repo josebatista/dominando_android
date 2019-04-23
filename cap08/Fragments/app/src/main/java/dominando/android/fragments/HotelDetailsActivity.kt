@@ -19,6 +19,16 @@ class HotelDetailsActivity : AppCompatActivity() {
 
     }
 
+    /*
+    Alternativa ao launchmode da HotelActivity, para reutilizar a instancia anterior sera reutilizada
+
+    override fun getParentActivityIntent(): Intent? {
+        val it = super.getParentActivityIntent()
+        it?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return it
+    }
+    */
+
     private fun showHotelDetailsFragment() {
         val fragment = HotelDetailsFragment.newInstance(hotelId)
         supportFragmentManager
