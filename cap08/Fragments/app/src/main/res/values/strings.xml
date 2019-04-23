@@ -6,4 +6,8 @@
     <string name="action_new_hotel">Novo Hotel</string>
     <string name="action_info">Info</string>
     <string name="hint_search">Procurar por Hotel</string>
+
+    <string name="about_title">Dominando o Android</string>
+    <string name="about_message">Desenvolvido por José Pereira</string>
+    <string name="about_button_site">Site</string>
 </resources>
