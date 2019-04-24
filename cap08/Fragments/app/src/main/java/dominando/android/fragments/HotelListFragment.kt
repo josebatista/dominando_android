@@ -19,7 +19,8 @@ class HotelListFragment : ListFragment(), HotelListView, AdapterView.OnItemLongC
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.searchHotels("")
+        retainInstance = true
+        presenter.init()
         listView.onItemLongClickListener = this
     }
 
