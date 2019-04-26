@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import kotlinx.android.synthetic.main.activity_hotel.*
 
 class HotelActivity : AppCompatActivity(),
     HotelListFragment.OnHotelClickListener,
@@ -26,6 +27,11 @@ class HotelActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel)
+
+        fabAdd.setOnClickListener {
+            listFragment.hideDeleteMode()
+            HotelFormFragment.newInstance().open(supportFragmentManager)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -63,9 +69,6 @@ class HotelActivity : AppCompatActivity(),
         when (item?.itemId) {
             R.id.action_info -> {
                 AboutDialogFragment().show(supportFragmentManager, "sobre")
-            }
-            R.id.action_new -> {
-                HotelFormFragment.newInstance().open(supportFragmentManager)
             }
         }
         return super.onOptionsItemSelected(item)
