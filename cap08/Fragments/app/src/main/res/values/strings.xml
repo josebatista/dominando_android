@@ -22,4 +22,10 @@
         <item quantity="one">1 selecionado</item>
         <item quantity="other">%d selecionados</item>
     </plurals>
+
+    <plurals name="message_hotels_deleted">
+        <item quantity="one">1 item excluído</item>
+        <item quantity="other">%d itens excluídos</item>
+    </plurals>
+    <string name="undo">Desfazer</string>
 </resources>
