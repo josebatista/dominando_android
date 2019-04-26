@@ -28,4 +28,8 @@
         <item quantity="other">%d itens excluídos</item>
     </plurals>
     <string name="undo">Desfazer</string>
+
+    <string name="action_share">Compartilhar</string>
+    <string name="share_text">Me hospedei no hotel %1$s e o classifiquei com %2$.1f estrelas</string>
+
 </resources>
