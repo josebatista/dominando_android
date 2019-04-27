@@ -43,5 +43,13 @@ class MainActivity : AppCompatActivity() {
     private fun selectMenuOption(menuItem: MenuItem) {
         menuItem.isChecked = true
         drawerLayout.closeDrawers()
+        val title = menuItem.title.toString()
+        if (supportFragmentManager.findFragmentByTag(title) == null) {
+            val firstLevelFragment = FirstLevelFragment.newInstance(title)
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.content, firstLevelFragment, title)
+                .commit()
+        }
     }
 }
