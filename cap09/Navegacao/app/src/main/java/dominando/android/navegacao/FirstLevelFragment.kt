@@ -17,7 +17,7 @@ class FirstLevelFragment : Fragment() {
         super.onCreate(savedInstanceState)
         actions.put(getString(R.string.option_tab), TabsActivity::class.java)
         actions.put(getString(R.string.option_bottom), BottomNavActivity::class.java)
-//        actions.put(getString(R.string.option_pager), PagerActivity::class.java)
+        actions.put(getString(R.string.option_pager), PagerActivity::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
