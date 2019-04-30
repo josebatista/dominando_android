@@ -10,7 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".TabsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
