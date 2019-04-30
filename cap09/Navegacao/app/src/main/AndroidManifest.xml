@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".BottomNavActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".TabsActivity"
             android:parentActivityName=".MainActivity" />
         <activity
