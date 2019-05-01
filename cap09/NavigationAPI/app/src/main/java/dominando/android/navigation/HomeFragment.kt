@@ -18,12 +18,18 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         btnGo.setOnClickListener {
 
+            //adicionando parametros para enviar para o outro fragment
+            val args = Bundle().apply {
+                putString("full_name", "José Pereira")
+                putInt("age", 32)
+            }
+
             //Método mais simples para o clique de um botao
 //            Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_completeFragment)
 
             //Forma mais generica e mais recomendada (funciona tambem quando nao e clique de botao)
             Navigation.findNavController(requireActivity(), R.id.navHostFragment)
-                .navigate(R.id.action_homeFragment_to_completeFragment)
+                .navigate(R.id.action_homeFragment_to_completeFragment, args)
         }
     }
 

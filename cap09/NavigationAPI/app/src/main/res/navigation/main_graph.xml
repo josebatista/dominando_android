@@ -19,6 +19,13 @@
         android:id="@+id/completeFragment"
         android:name="dominando.android.navigation.CompleteFragment"
         android:label="CompleteFragment"
-        tools:layout="@layout/fragment_complete" />
+        tools:layout="@layout/fragment_complete">
+        <argument
+            android:name="full_name"
+            app:argType="string" />
+        <argument
+            android:name="age"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>
