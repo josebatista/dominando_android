@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Persistencia</string>
+
+    <string name="message_permission_requested">Você tem que habilitar essa permissão para ler ou salvar o arquivo.</string>
+    <string name="permission_granted">Permissão concedida</string>
+    <string name="permission_denied">Permissão negada</string>
 </resources>

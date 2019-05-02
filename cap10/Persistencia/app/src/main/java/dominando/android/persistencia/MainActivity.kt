@@ -1,11 +1,14 @@
 package dominando.android.persistencia
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
 
@@ -92,6 +95,13 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun saveToExternal(privateDir: Boolean) {
+        val hasPermission = checkStoragePermission(
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE, RC_STORAGE_PERMISSION
+        )
+        if (!hasPermission) {
+            return
+        }
+
         val state = Environment.getExternalStorageState()
         if (Environment.MEDIA_MOUNTED == state) {
             try {
@@ -115,6 +125,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFromExternal(privateDir: Boolean) {
+        val hasPermission = checkStoragePermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE, RC_STORAGE_PERMISSION
+        )
+        if (!hasPermission) {
+            return
+        }
+
         val state = Environment.getExternalStorageState()
         if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
             val myDir = getExternalDir(privateDir)
@@ -133,6 +150,34 @@ class MainActivity : AppCompatActivity() {
         } else {
             Log.e("JBP", "SD Card indisponível")
         }
+    }
+
+    private fun checkStoragePermission(permisson: String, requestCode: Int): Boolean {
+        if (ActivityCompat.checkSelfPermission(this, permisson) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permisson)) {
+                Toast.makeText(this, R.string.message_permission_requested, Toast.LENGTH_LONG).show()
+            }
+            ActivityCompat.requestPermissions(this, arrayOf(permisson), requestCode)
+            return false
+        }
+        return true
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            RC_STORAGE_PERMISSION -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    companion object {
+        const val RC_STORAGE_PERMISSION = 0
     }
 
 }
