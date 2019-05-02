@@ -1,7 +1,9 @@
 package dominando.android.persistencia
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.*
@@ -61,8 +63,24 @@ class MainActivity : AppCompatActivity() {
         textView.text = sb.toString()
     }
 
-    private fun saveToInternal() {}
-    private fun loadFromInternal() {}
+    private fun saveToInternal() {
+        try {
+            val fos = openFileOutput("arquivo.txt", Context.MODE_PRIVATE)
+            save(fos)
+        } catch (e: Exception) {
+            Log.e("JBP", "Erro ao salvar o arquivo", e)
+        }
+    }
+
+    private fun loadFromInternal() {
+        try {
+            val fis = openFileInput("arquivo.txt")
+            load(fis)
+        } catch (e: Exception) {
+            Log.e("JBP", "erro ao carregar o arquivo", e)
+        }
+    }
+
     private fun saveToExternal(privateDir: Boolean) {}
     private fun loadFromExternal(privateDir: Boolean) {}
 }
