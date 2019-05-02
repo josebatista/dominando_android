@@ -2,6 +2,7 @@ package dominando.android.persistencia
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -81,6 +82,57 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveToExternal(privateDir: Boolean) {}
-    private fun loadFromExternal(privateDir: Boolean) {}
+    private fun getExternalDir(privateDir: Boolean) =
+        if (privateDir) {
+            // SDCard/Android/data/pacote.da.app/files
+            getExternalFilesDir(null)
+        } else {
+            // SDCard/DCIM
+            Environment.getExternalStorageDirectory()
+        }
+
+    private fun saveToExternal(privateDir: Boolean) {
+        val state = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED == state) {
+            try {
+                val myDir = getExternalDir(privateDir)
+                if (myDir?.exists() == false) {
+                    myDir.mkdir()
+                }
+
+                val txtFile = File(myDir, "arquivo.txt")
+                if (!txtFile.exists()) {
+                    txtFile.createNewFile()
+                }
+                val fos = FileOutputStream(txtFile)
+                save(fos)
+            } catch (e: IOException) {
+                Log.d("JBP", "Erro ao salvar arquivo", e)
+            }
+        } else {
+            Log.e("JBP", "Não é possível escrever no SD Card")
+        }
+    }
+
+    private fun loadFromExternal(privateDir: Boolean) {
+        val state = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state) {
+            val myDir = getExternalDir(privateDir)
+            if (myDir?.exists() == true) {
+                val txtFile = File(myDir, "arquivo.txt")
+                if (txtFile.exists()) {
+                    try {
+                        txtFile.createNewFile()
+                        val fis = FileInputStream(txtFile)
+                        load(fis)
+                    } catch (e: IOException) {
+                        Log.d("JBP", "Erro ao carregar arquivo", e)
+                    }
+                }
+            }
+        } else {
+            Log.e("JBP", "SD Card indisponível")
+        }
+    }
+
 }
