@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/rgType" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -70,5 +70,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnSave" />
+
+    <Button
+        android:id="@+id/btnOpenPref"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Abrir Preferências"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnReadPref"
+        app:layout_constraintEnd_toStartOf="@+id/btnReadPref"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnReadPref"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Ler Preferências"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnOpenPref"
+        app:layout_constraintTop_toBottomOf="@id/txtView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

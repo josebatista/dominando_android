@@ -1,12 +1,14 @@
 package dominando.android.persistencia
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
@@ -25,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             btnSaveClick()
         }
+        btnOpenPref.setOnClickListener {
+            startActivity(Intent(this, ConfigActivity::class.java))
+        }
+        btnReadPref.setOnClickListener {
+            readPrefs()
+        }
     }
 
     private fun btnReadClick() {
@@ -41,6 +49,24 @@ class MainActivity : AppCompatActivity() {
             R.id.rbExternalPriv -> saveToExternalWithPermissionCheck(true)
             R.id.rbExternalPublic -> saveToExternalWithPermissionCheck(false)
         }
+    }
+
+    private fun readPrefs() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val city = prefs.getString(getString(R.string.pref_city), getString(R.string.pref_city_default))
+        val socialNetwork = prefs.getString(
+            getString(R.string.pref_social_network),
+            getString(R.string.pref_social_network_default)
+        )
+        val messages = prefs.getBoolean(getString(R.string.pref_messages), false)
+
+        val msg = String.format(
+            "%s = %s\n%s = %s\n%s = %s",
+            getString(R.string.title_city), city,
+            getString(R.string.title_social_network), socialNetwork,
+            getString(R.string.title_messages), messages.toString()
+        )
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun save(fos: FileOutputStream) {
@@ -66,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         } while (true)
         reader.close()
         fis.close()
-        textView.text = sb.toString()
+        txtView.text = sb.toString()
     }
 
     private fun saveToInternal() {
