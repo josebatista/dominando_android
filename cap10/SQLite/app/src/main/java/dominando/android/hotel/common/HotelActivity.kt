@@ -1,12 +1,14 @@
 package dominando.android.hotel.common
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import dominando.android.hotel.*
+import dominando.android.hotel.R
 import dominando.android.hotel.details.HotelDetailsActivity
 import dominando.android.hotel.details.HotelDetailsFragment
 import dominando.android.hotel.form.HotelFormFragment
@@ -107,6 +109,11 @@ class HotelActivity : AppCompatActivity(),
 
     override fun onHotelSaved(hotel: Hotel) {
         listFragment.search(lastSearchTerm)
+        val detailsFragment = supportFragmentManager
+            .findFragmentByTag(HotelDetailsFragment.TAG_DETAILS) as? HotelDetailsFragment
+        if (detailsFragment != null && hotel.id == hotelIdSelected) {
+            showDetailsFragment(hotelIdSelected)
+        }
     }
 
     override fun onHotelsDeleted(hotels: List<Hotel>) {
@@ -118,6 +125,13 @@ class HotelActivity : AppCompatActivity(),
                     .remove(fragment)
                     .commit()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            listFragment.search(lastSearchTerm)
         }
     }
 

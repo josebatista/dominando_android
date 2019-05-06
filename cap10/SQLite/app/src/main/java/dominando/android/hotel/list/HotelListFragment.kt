@@ -5,20 +5,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.ListFragment
 import com.google.android.material.snackbar.Snackbar
-import dominando.android.hotel.repository.memory.MemoryRepository
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class HotelListFragment : ListFragment(), HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback {
 
-    private val presenter =
-        HotelListPresenter(this, MemoryRepository)
+    private val presenter: HotelListPresenter by inject { parametersOf(this) }
 
     private var actionMode: ActionMode? = null
 
@@ -30,7 +29,7 @@ class HotelListFragment : ListFragment(), HotelListView, AdapterView.OnItemLongC
     }
 
     override fun showHotels(hotels: List<Hotel>) {
-        val adapter = ArrayAdapter<Hotel>(requireContext(), android.R.layout.simple_list_item_activated_1, hotels)
+        val adapter = HotelAdapter(requireContext(), hotels)
         listAdapter = adapter
     }
 
