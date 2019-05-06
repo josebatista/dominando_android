@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -30,7 +29,7 @@ class HotelListFragment : ListFragment(), HotelListView, AdapterView.OnItemLongC
     }
 
     override fun showHotels(hotels: List<Hotel>) {
-        val adapter = ArrayAdapter<Hotel>(requireContext(), android.R.layout.simple_list_item_activated_1, hotels)
+        val adapter = HotelAdapter(requireContext(), hotels)
         listAdapter = adapter
     }
 
