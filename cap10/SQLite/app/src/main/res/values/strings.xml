@@ -32,4 +32,6 @@
     <string name="action_share">Compartilhar</string>
     <string name="share_text">Me hospedei no hotel %1$s e o classifiquei com %2$.1f estrelas</string>
 
+    <string name="action_edit">Editar</string>
+
 </resources>

@@ -7,6 +7,7 @@ import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import dominando.android.hotel.R
+import dominando.android.hotel.form.HotelFormFragment
 import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.fragment_hotel_details.*
 import org.koin.android.ext.android.inject
@@ -39,6 +40,14 @@ class HotelDetailsFragment : Fragment(), HotelDetailsView {
         val shareItem = menu?.findItem(R.id.action_share)
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as? ShareActionProvider
         setShareIntent()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_edit) {
+            HotelFormFragment.newInstance(hotel?.id ?: 0).open(requireFragmentManager())
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun showHotelDetails(hotel: Hotel) {
