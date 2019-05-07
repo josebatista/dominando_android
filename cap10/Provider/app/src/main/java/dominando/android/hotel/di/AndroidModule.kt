@@ -7,13 +7,15 @@ import dominando.android.hotel.form.HotelFormView
 import dominando.android.hotel.list.HotelListPresenter
 import dominando.android.hotel.list.HotelListView
 import dominando.android.hotel.repository.HotelRepository
-import dominando.android.hotel.repository.sqlite.SQLiteRepository
+import dominando.android.hotel.repository.sqlite.ProviderRepository
 import org.koin.dsl.module
 
 val androidModule = module {
     single { this }
     single {
-        SQLiteRepository(context = get()) as HotelRepository
+        // Removendo para injetar o Provider criado
+        // SQLiteRepository(context = get()) as HotelRepository
+        ProviderRepository(ctx = get()) as HotelRepository
     }
     factory { (view: HotelListView) ->
         HotelListPresenter(view, repository = get())
