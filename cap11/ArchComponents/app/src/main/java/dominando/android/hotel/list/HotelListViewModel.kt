@@ -10,7 +10,7 @@ import dominando.android.hotel.repository.HotelRepository
 
 class HotelListViewModel(private val repository: HotelRepository) : ViewModel() {
 
-    val hotelIdSelected: Long = -1
+    var hotelIdSelected: Long = -1
     private val searchTerm = MutableLiveData<String>()
     private val hotels = Transformations.switchMap(searchTerm) { term ->
         repository.search(term)
