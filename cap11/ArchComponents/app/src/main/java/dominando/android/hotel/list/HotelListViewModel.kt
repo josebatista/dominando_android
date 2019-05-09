@@ -13,7 +13,7 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
     var hotelIdSelected: Long = -1
     private val searchTerm = MutableLiveData<String>()
     private val hotels = Transformations.switchMap(searchTerm) { term ->
-        repository.search(term)
+        repository.search("%$term%")
     }
     private val inDeleteMode = MutableLiveData<Boolean>().apply {
         value = false
