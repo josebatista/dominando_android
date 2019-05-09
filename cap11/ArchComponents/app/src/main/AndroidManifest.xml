@@ -10,12 +10,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <provider
-            android:name=".repository.sqlite.HotelProvider"
-            android:authorities="dominando.android.hotel"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity
             android:name=".details.HotelDetailsActivity"
             android:parentActivityName=".common.HotelActivity" />

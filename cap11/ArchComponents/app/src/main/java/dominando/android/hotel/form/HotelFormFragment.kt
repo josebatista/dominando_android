@@ -9,15 +9,17 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.fragment_hotel_form.*
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HotelFormFragment : DialogFragment(), HotelFormView {
+class HotelFormFragment : DialogFragment() {
 
-    private val presenter: HotelFormPresenter by inject { parametersOf(this) }
+    private val viewModel: HotelFormViewModel by viewModel()
+
+    private var hotel: Hotel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_hotel_form, container, false)
@@ -26,7 +28,14 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val hotelId = arguments?.getLong(EXTRA_HOTEL_ID, 0) ?: 0
-        presenter.loadHotel(hotelId)
+
+        if (hotelId > 0) {
+            viewModel.loadHotel(hotelId).observe(viewLifecycleOwner, Observer { hotel ->
+                this.hotel = hotel
+                showHotel(hotel)
+            })
+        }
+
         edtAddress.setOnEditorActionListener { _, i, _ ->
             handleKeyboardEvent(i)
         }
@@ -35,48 +44,44 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
-    override fun showHotel(hotel: Hotel) {
+    private fun showHotel(hotel: Hotel) {
         edtName.setText(hotel.name)
         edtAddress.setText(hotel.address)
         rtbRating.rating = hotel.rating
 
     }
 
-    override fun errorInvalidHotel() {
+    private fun errorInvalidHotel() {
         Toast.makeText(requireContext(), R.string.error_invalid_hotel, Toast.LENGTH_SHORT).show()
     }
 
-    override fun errorSaveHotel() {
+    private fun errorSaveHotel() {
         Toast.makeText(requireContext(), R.string.error_hotel_not_found, Toast.LENGTH_SHORT).show()
     }
 
     private fun handleKeyboardEvent(actionId: Int): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            val hotel = saveHotel()
-            if (hotel != null) {
-                if (activity is OnHotelSavedListener) {
-                    val listener = activity as OnHotelSavedListener
-                    listener.onHotelSaved(hotel)
-                }
-                //feche o dialog
-                dialog.dismiss()
-                return true
-            }
+            saveHotel()
+            return true
         }
         return false
     }
 
-    private fun saveHotel(): Hotel? {
-        val hotel = Hotel()
+    private fun saveHotel() {
+        val hotel = this.hotel ?: Hotel()
         val hotelId = arguments?.getLong(EXTRA_HOTEL_ID, 0) ?: 0
         hotel.id = hotelId
         hotel.name = edtName.text.toString()
         hotel.address = edtAddress.text.toString()
         hotel.rating = rtbRating.rating
-        return if (presenter.saveHotel(hotel)) {
-            hotel
-        } else {
-            null
+        try {
+            if (viewModel.saveHotel(hotel)) {
+                dialog.dismiss()
+            } else {
+                errorInvalidHotel()
+            }
+        } catch (e: Exception) {
+            errorSaveHotel()
         }
     }
 
@@ -84,10 +89,6 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
         if (fm.findFragmentByTag(DIALOG_TAG) == null) {
             show(fm, DIALOG_TAG)
         }
-    }
-
-    interface OnHotelSavedListener {
-        fun onHotelSaved(hotel: Hotel)
     }
 
     companion object {

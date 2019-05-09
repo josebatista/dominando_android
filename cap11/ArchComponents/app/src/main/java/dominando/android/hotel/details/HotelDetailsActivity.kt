@@ -5,10 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dominando.android.hotel.R
-import dominando.android.hotel.form.HotelFormFragment
-import dominando.android.hotel.model.Hotel
 
-class HotelDetailsActivity : AppCompatActivity(), HotelFormFragment.OnHotelSavedListener {
+class HotelDetailsActivity : AppCompatActivity() {
 
     private val hotelId: Long by lazy { intent.getLongExtra(EXTRA_HOTEL_ID, -1) }
 
@@ -20,11 +18,6 @@ class HotelDetailsActivity : AppCompatActivity(), HotelFormFragment.OnHotelSaved
             showHotelDetailsFragment()
         }
 
-    }
-
-    override fun onHotelSaved(hotel: Hotel) {
-        setResult(Activity.RESULT_OK)
-        showHotelDetailsFragment()
     }
 
     /*
