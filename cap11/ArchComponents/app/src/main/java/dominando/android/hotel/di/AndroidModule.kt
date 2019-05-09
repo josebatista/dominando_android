@@ -1,29 +1,26 @@
 package dominando.android.hotel.di
 
-import dominando.android.hotel.details.HotelDetailsPresenter
-import dominando.android.hotel.details.HotelDetailsView
-import dominando.android.hotel.form.HotelFormPresenter
-import dominando.android.hotel.form.HotelFormView
-import dominando.android.hotel.list.HotelListPresenter
-import dominando.android.hotel.list.HotelListView
+import dominando.android.hotel.details.HotelDetailsViewModel
+import dominando.android.hotel.form.HotelFormViewModel
+import dominando.android.hotel.list.HotelListViewModel
 import dominando.android.hotel.repository.HotelRepository
-import dominando.android.hotel.repository.sqlite.ProviderRepository
+import dominando.android.hotel.repository.room.HotelDatabase
+import dominando.android.hotel.repository.room.RoomRepository
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val androidModule = module {
     single { this }
     single {
-        // Removendo para injetar o Provider criado
-        // SQLiteRepository(context = get()) as HotelRepository
-        ProviderRepository(ctx = get()) as HotelRepository
+        RoomRepository(HotelDatabase.getDatabase(context = get())) as HotelRepository
     }
-    factory { (view: HotelListView) ->
-        HotelListPresenter(view, repository = get())
+    viewModel {
+        HotelListViewModel(repository = get())
     }
-    factory { (view: HotelDetailsView) ->
-        HotelDetailsPresenter(view, repository = get())
+    viewModel {
+        HotelDetailsViewModel(repository = get())
     }
-    factory { (view: HotelFormView) ->
-        HotelFormPresenter(view, repository = get())
+    viewModel {
+        HotelFormViewModel(repository = get())
     }
 }
