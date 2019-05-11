@@ -7,6 +7,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -19,20 +21,22 @@ object BookHttp {
 
     private const val BOOK_JSON_URL =
         "https://raw.githubusercontent.com/nglauber/dominando_android3/master/livros_novatec.json"
+    private const val BOOK_XML_URL =
+        "https://raw.githubusercontent.com/nglauber/dominando_android3/master/livros_novatec.xml"
 
     @Throws(IOException::class)
     private fun connect(urlAddress: String): HttpURLConnection {
         val second = 1000
         val url = URL(urlAddress)
-        val connetion = (url.openConnection() as HttpURLConnection).apply {
+        val connection = (url.openConnection() as HttpURLConnection).apply {
             readTimeout = 10 * second
             connectTimeout = 15 * second
             requestMethod = "GET"
             doInput = true
             doOutput = false
         }
-        connetion.connect()
-        return connetion
+        connection.connect()
+        return connection
     }
 
     fun hasConnection(ctx: Context): Boolean {
@@ -130,4 +134,61 @@ object BookHttp {
         return null
     }
 
+    @Throws(Exception::class)
+    private fun readBooksXml(inputStream: InputStream): List<Book> {
+        val bookList = mutableListOf<Book>()
+        var book: Book? = null
+        var currentTag: String? = null
+        var currentCategory = ""
+        val factory = XmlPullParserFactory.newInstance()
+        val xpp = factory.newPullParser()
+        xpp.setInput(inputStream, "UTF-8")
+
+        var eventType = xpp.eventType
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            when (eventType) {
+                XmlPullParser.START_TAG -> {
+                    currentTag = xpp.name
+                    if ("livro" == currentTag) {
+                        book = Book()
+                        book.category = currentCategory
+                    }
+                }
+                XmlPullParser.END_TAG -> {
+                    if ("livro" == xpp.name) {
+                        bookList.add(book as Book)
+                    }
+                }
+                XmlPullParser.TEXT -> {
+                    if (!xpp.isWhitespace) {
+                        val text = xpp.text
+                        when (currentTag) {
+                            "titulo" -> book?.title = text
+                            "paginas" -> book?.pages = text.toInt()
+                            "capa" -> book?.coverUrl = text
+                            "autor" -> book?.author = text
+                            "ano" -> book?.year = text.toInt()
+                            "categoria" -> currentCategory = text
+                        }
+                    }
+                }
+            }
+            eventType = xpp.next()
+        }
+        return bookList
+    }
+
+    fun readBooksXml(): List<Book>? {
+        try {
+            val connection = connect(BOOK_XML_URL)
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val `is` = connection.inputStream
+                return readBooksXml(`is`)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
 }
