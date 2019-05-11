@@ -2,6 +2,9 @@ package dominando.android.http
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -10,6 +13,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
+import java.util.concurrent.TimeUnit
 
 object BookHttp {
 
@@ -99,6 +103,31 @@ object BookHttp {
         }
 
         return String(bigBuffer.toByteArray(), Charset.forName("UTF-8"))
+    }
+
+    fun loadBooksGson(): List<Book>? {
+        val client = OkHttpClient.Builder()
+            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .build()
+        val request = Request.Builder()
+            .url(BOOK_JSON_URL)
+            .build()
+        try {
+            val response = client.newCall(request).execute()
+            val json = response.body()?.string()
+            val gson = Gson()
+            val publisher = gson.fromJson<Publisher>(json, Publisher::class.java)
+            return publisher.categories.flatMap { category ->
+                category.books.forEach { book ->
+                    book.category = category.name
+                }
+                category.books
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 
 }
