@@ -1,6 +1,5 @@
 package dominando.android.http
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +7,29 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_books_list.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class BooksListFragment : Fragment() {
+class BooksListFragment : Fragment(), CoroutineScope {
 
-    private var asyncTask: BooksDownloadTask? = null
+    private lateinit var job: Job
+    private var downloadJob: Job? = null
+
     private val bookList = mutableListOf<Book>()
     private var adapter: ArrayAdapter<Book>? = null
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        job = Job()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,14 +45,14 @@ class BooksListFragment : Fragment() {
         if (bookList.isNotEmpty()) {
             showProgress(false)
         } else {
-            if (asyncTask == null) {
+            if (downloadJob == null) {
                 if (BookHttp.hasConnection(requireContext())) {
-                    startDownload()
+                    startDownloadJson()
                 } else {
                     progressBar.visibility = View.GONE
                     txtMessage.setText(R.string.error_no_connection)
                 }
-            } else if (asyncTask?.status == AsyncTask.Status.RUNNING) {
+            } else if (downloadJob?.isActive == true) {
                 showProgress(true)
             }
         }
@@ -54,10 +66,15 @@ class BooksListFragment : Fragment() {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    private fun startDownload() {
-        if (asyncTask?.status != AsyncTask.Status.RUNNING) {
-            asyncTask = BooksDownloadTask()
-            asyncTask?.execute()
+    private fun startDownloadJson() {
+        downloadJob = launch {
+            showProgress(true)
+            val booksTask = withContext(Dispatchers.IO) {
+                BookHttp.loadBooksGson()
+            }
+            updateBookLit(booksTask)
+            showProgress(false)
+
         }
     }
 
@@ -69,24 +86,7 @@ class BooksListFragment : Fragment() {
             txtMessage.setText(R.string.error_load_books)
         }
         adapter?.notifyDataSetChanged()
-        asyncTask = null
-    }
-
-    inner class BooksDownloadTask : AsyncTask<Void, Void, List<Book>?>() {
-        override fun onPreExecute() {
-            super.onPreExecute()
-            showProgress(true)
-        }
-
-        override fun doInBackground(vararg params: Void?): List<Book>? {
-            return BookHttp.readBooksXml()
-        }
-
-        override fun onPostExecute(result: List<Book>?) {
-            super.onPostExecute(result)
-            showProgress(false)
-            updateBookLit(result)
-        }
+        downloadJob = null
     }
 
 }
