@@ -26,7 +26,7 @@ class BooksListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, bookList)
+        adapter = BookListAdapter(requireContext(), bookList)
         listView.emptyView = txtMessage
         listView.adapter = adapter
 

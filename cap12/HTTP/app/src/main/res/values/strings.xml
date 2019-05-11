@@ -5,4 +5,6 @@
     <string name="error_load_books">Falha ao obter lista de livros</string>
     <string name="message_progress">Baixando informações dos livros</string>
 
+    <string name="n_paginas">%d páginas</string>
+
 </resources>
