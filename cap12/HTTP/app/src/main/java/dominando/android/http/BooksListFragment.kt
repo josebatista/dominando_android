@@ -79,7 +79,7 @@ class BooksListFragment : Fragment() {
         }
 
         override fun doInBackground(vararg params: Void?): List<Book>? {
-            return BookHttp.loadBooks()
+            return BookHttp.loadBooksGson()
         }
 
         override fun onPostExecute(result: List<Book>?) {
