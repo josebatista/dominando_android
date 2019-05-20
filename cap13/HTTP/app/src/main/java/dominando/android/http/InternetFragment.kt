@@ -28,8 +28,8 @@ abstract class InternetFragment : Fragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         unregisterForConnectivityChanges()
+        super.onPause()
     }
 
     private fun isMarshmallowOrLater() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -56,9 +56,8 @@ abstract class InternetFragment : Fragment() {
             val context = requireContext()
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             connectivityManager.unregisterNetworkCallback(pit)
-        } else {
-            context?.unregisterReceiver(receiver)
         }
+        context?.unregisterReceiver(receiver)
     }
 
     inner class ConnectionReceiver : BroadcastReceiver() {

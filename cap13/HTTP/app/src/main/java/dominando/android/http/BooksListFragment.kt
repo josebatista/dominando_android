@@ -43,7 +43,6 @@ class BooksListFragment : InternetFragment(), CoroutineScope {
 
         if (bookList.isNotEmpty()) {
             showProgress(false)
-            updateBookLit(bookList)
         } else {
             startDownload()
         }
