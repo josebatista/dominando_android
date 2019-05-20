@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dominando.android.broadcast">
 
+    <permission android:name="dominando.android.broadcast.MESTRE_JEDI" />
+
+    <uses-permission android:name="dominando.android.broadcast.MESTRE_JEDI" />
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -19,7 +23,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".EventReceiver">
+        <receiver
+            android:name=".EventReceiver"
+            android:permission="dominando.android.broadcast.MESTRE_JEDI">
             <intent-filter>
                 <action android:name="dominando.android.broadcast.ACTION_EVENT" />
                 <category android:name="android.intent.category.DEFAULT" />
