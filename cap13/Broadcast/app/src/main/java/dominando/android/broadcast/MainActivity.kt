@@ -1,15 +1,17 @@
 package dominando.android.broadcast
 
-import android.content.ComponentName
-import android.content.Intent
+import android.content.*
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private val receiver: InternalReceiver = InternalReceiver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,22 @@ class MainActivity : AppCompatActivity() {
                 sendImplicitBroadcastExp()
             }
         }
+
+        btnLocal.setOnClickListener {
+            val intent = Intent(ACTION_EVENT)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val filterLocal = IntentFilter(ACTION_EVENT)
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filterLocal)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver)
     }
 
     /**
@@ -51,6 +69,12 @@ class MainActivity : AppCompatActivity() {
             )
             explicit.component = componentName
             sendBroadcast(explicit)
+        }
+    }
+
+    inner class InternalReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            txtMessage.text = "Ação:\n${intent?.action}"
         }
     }
 
