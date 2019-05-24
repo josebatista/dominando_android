@@ -1,5 +1,7 @@
 package dominando.android.hotel.form
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +12,10 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
+import dominando.android.hotel.repository.http.HotelHttp
 import kotlinx.android.synthetic.main.fragment_hotel_form.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,8 +36,19 @@ class HotelFormFragment : DialogFragment() {
         if (hotelId > 0) {
             viewModel.loadHotel(hotelId).observe(viewLifecycleOwner, Observer { hotel ->
                 this.hotel = hotel
+                viewModel.photoUrl.value = hotel.photoUrl
                 showHotel(hotel)
             })
+        }
+
+        viewModel.photoUrl.observe(viewLifecycleOwner, Observer { photoUrl ->
+            photoUrl?.let {
+                loadImage(it)
+            }
+        })
+
+        imgPhoto.setOnClickListener {
+            selectPhoto()
         }
 
         edtAddress.setOnEditorActionListener { _, i, _ ->
@@ -42,6 +57,34 @@ class HotelFormFragment : DialogFragment() {
         dialog.setTitle(R.string.action_new_hotel)
         //Abre o teclado virtual ao exibir o Dialog
         dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    }
+
+    private fun loadImage(url: String) {
+        var imageUrl = url
+        if (imageUrl.isNotEmpty()) {
+            if (imageUrl.contains("content://")) {
+                imageUrl = HotelHttp.BASE_URL + url
+            }
+            Glide.with(imgPhoto.context).load(imageUrl).into(imgPhoto)
+        }
+    }
+
+    private fun selectPhoto() {
+        startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            type = "image/*"
+        }, REQUEST_GALLERY)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_GALLERY) {
+                viewModel.photoUrl.value = data?.data?.toString()
+            }
+        }
     }
 
     private fun showHotel(hotel: Hotel) {
@@ -74,6 +117,7 @@ class HotelFormFragment : DialogFragment() {
         hotel.name = edtName.text.toString()
         hotel.address = edtAddress.text.toString()
         hotel.rating = rtbRating.rating
+        hotel.photoUrl = viewModel.photoUrl.value ?: ""
         try {
             if (viewModel.saveHotel(hotel)) {
                 dialog.dismiss()
@@ -92,6 +136,7 @@ class HotelFormFragment : DialogFragment() {
     }
 
     companion object {
+        private const val REQUEST_GALLERY = 1
         private const val DIALOG_TAG = "editDialog"
         private const val EXTRA_HOTEL_ID = "hotel_id"
 
