@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import dominando.android.hotel.common.SingleLiveEvent
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
+import dominando.android.hotel.repository.http.Status
 
 class HotelListViewModel(private val repository: HotelRepository) : ViewModel() {
 
@@ -70,7 +71,10 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
     }
 
     fun deleteSelected() {
-        repository.remove(*selectedItems.toTypedArray())
+        selectedItems.forEach {
+            it.status = Status.DELETE
+            repository.update(it)
+        }
         deletedItems.clear()
         deletedItems.addAll(selectedItems)
         setInDeleteMode(false)
