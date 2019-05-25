@@ -1,5 +1,6 @@
 package dominando.android.hotel.di
 
+import android.content.Context
 import com.google.gson.GsonBuilder
 import dominando.android.hotel.details.HotelDetailsViewModel
 import dominando.android.hotel.form.HotelFormViewModel
@@ -7,6 +8,8 @@ import dominando.android.hotel.list.HotelListViewModel
 import dominando.android.hotel.repository.HotelRepository
 import dominando.android.hotel.repository.http.HotelHttp
 import dominando.android.hotel.repository.http.HotelHttpApi
+import dominando.android.hotel.repository.imagefiles.FindHotelPicture
+import dominando.android.hotel.repository.imagefiles.ImageGalleryPictureFinder
 import dominando.android.hotel.repository.room.HotelDatabase
 import dominando.android.hotel.repository.room.RoomRepository
 import okhttp3.OkHttpClient
@@ -52,9 +55,17 @@ val androidModule = module {
     }
 
     factory {
+        val context = get() as Context
+        val resolver = context.contentResolver
+        val uploadDir = context.externalCacheDir ?: context.cacheDir
+        ImageGalleryPictureFinder(uploadDir, resolver) as FindHotelPicture
+    }
+
+    factory {
         HotelHttp(
             service = get(),
             repository = get(),
+            pictureFinder = get(),
             currentUser = "jbp"
         )
     }
