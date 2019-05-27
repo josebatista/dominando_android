@@ -34,4 +34,6 @@
 
     <string name="action_edit">Editar</string>
 
+    <string name="error_sync">Erro ao sincronizar com o servidor.</string>
+
 </resources>

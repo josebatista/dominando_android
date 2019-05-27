@@ -62,7 +62,7 @@ class HotelFormFragment : DialogFragment() {
     private fun loadImage(url: String) {
         var imageUrl = url
         if (imageUrl.isNotEmpty()) {
-            if (imageUrl.contains("content://")) {
+            if (!imageUrl.contains("content://")) {
                 imageUrl = HotelHttp.BASE_URL + url
             }
             Glide.with(imgPhoto.context).load(imageUrl).into(imgPhoto)
