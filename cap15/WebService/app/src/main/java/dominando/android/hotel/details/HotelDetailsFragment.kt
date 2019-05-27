@@ -72,7 +72,7 @@ class HotelDetailsFragment : Fragment() {
         rtbRating.rating = hotel.rating
         var photoUrl = hotel.photoUrl
         if (photoUrl.isNotEmpty()) {
-            if (photoUrl.contains("content://")) {
+            if (!photoUrl.contains("content://")) {
                 photoUrl = HotelHttp.BASE_URL + hotel.photoUrl
             }
             Glide.with(imgPhoto.context).load(photoUrl).into(imgPhoto)
