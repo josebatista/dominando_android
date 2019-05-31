@@ -1,25 +1,18 @@
 package dominando.android.hotel.list
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
-import androidx.core.app.JobIntentService
 import androidx.fragment.app.ListFragment
 import androidx.lifecycle.Observer
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.work.WorkInfo
 import com.google.android.material.snackbar.Snackbar
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.repository.http.HotelIntentService
 import kotlinx.android.synthetic.main.fragment_list_hotel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -30,8 +23,18 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
 
     private var actionMode: ActionMode? = null
 
+    private val syncObserver = Observer<WorkInfo> {
+        swipeRefresh.isRefreshing = (it.state == WorkInfo.State.RUNNING || it.state == WorkInfo.State.ENQUEUED)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState == null) {
+            startSync()
+        } else {
+            viewModel.syncStatus?.observe(viewLifecycleOwner, syncObserver)
+        }
+
         listView.onItemLongClickListener = this
         viewModel.showDetailsCommand().observe(viewLifecycleOwner, Observer { hotel ->
             if (hotel != null) {
@@ -70,22 +73,6 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startSync()
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(serviceReceiver, IntentFilter(HotelIntentService.ACTION_SYNC))
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(serviceReceiver)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list_hotel, container, false)
     }
@@ -105,22 +92,8 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
     }
 
     private fun startSync() {
-        JobIntentService.enqueueWork(
-            requireContext(),
-            HotelIntentService::class.java, 0,
-            Intent(context, HotelIntentService::class.java)
-        )
-    }
-
-    private val serviceReceiver: BroadcastReceiver by lazy {
-        object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent) {
-                swipeRefresh.isRefreshing = false
-                if (!intent.getBooleanExtra(HotelIntentService.EXTRA_SUCCESS, false)) {
-                    Toast.makeText(activity, R.string.error_sync, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        viewModel.syncStatus?.removeObserver(syncObserver)
+        viewModel.startSync()?.observe(viewLifecycleOwner, syncObserver)
     }
 
     private fun showHotels(hotels: List<Hotel>) {

@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.work.WorkInfo
 import dominando.android.hotel.common.SingleLiveEvent
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
+import dominando.android.hotel.repository.http.HotelSyncWorker
 import dominando.android.hotel.repository.http.Status
 
 class HotelListViewModel(private val repository: HotelRepository) : ViewModel() {
@@ -27,6 +29,8 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
     private val deletedItems = mutableListOf<Hotel>()
     private val showDeletedMessage = SingleLiveEvent<Int>()
     private val showDetailsCommand = SingleLiveEvent<Hotel>()
+
+    var syncStatus: LiveData<WorkInfo>? = null
 
     fun isInDeleteMode(): LiveData<Boolean> = inDeleteMode
 
@@ -97,6 +101,11 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
         } else {
             selectedItems.removeAll { it.id == hotel.id }
         }
+    }
+
+    fun startSync(): LiveData<WorkInfo>? {
+        syncStatus = HotelSyncWorker.start()
+        return syncStatus
     }
 
 }
