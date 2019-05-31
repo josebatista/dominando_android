@@ -35,6 +35,8 @@ dependencies {
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
+    implementation "androidx.work:work-runtime:$workmanager_version"
+
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.room:room-runtime:$room_version"
