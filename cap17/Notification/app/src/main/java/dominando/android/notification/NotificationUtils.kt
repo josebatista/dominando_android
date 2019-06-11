@@ -14,6 +14,7 @@ import androidx.core.app.*
 object NotificationUtils {
 
     private const val CHANNEL_ID = "default"
+    private const val URGENT_ID = "urgent"
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(context: Context) {
@@ -31,6 +32,18 @@ object NotificationUtils {
             enableVibration(true)
             vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
         }
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationUrgentChannel(context: Context) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(
+            URGENT_ID,
+            context.getString(R.string.notif_channel_urgent_name),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -226,6 +239,23 @@ object NotificationUtils {
         notificationManager.notify(8, notificationBuilder.build())
     }
 
-    fun notificationHeadsUp(context: Context) {}
+    fun notificationHeadsUp(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationUrgentChannel(context)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(context, URGENT_ID)
+            .setSmallIcon(R.drawable.ic_favorite)
+            .setContentTitle(context.getString(R.string.notif_title))
+            .setContentText(context.getString(R.string.notif_text))
+            .setColor(ActivityCompat.getColor(context, R.color.colorAccent))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setAutoCancel(true)
+            .setFullScreenIntent(getContentIntent(context), true)
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(1, notificationBuilder.build())
+
+    }
 
 }
