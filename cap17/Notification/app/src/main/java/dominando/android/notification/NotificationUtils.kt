@@ -191,7 +191,33 @@ object NotificationUtils {
         }
     }
 
-    fun notificationInbox(context: Context) {}
+    fun notificationInbox(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(context)
+        }
+
+        val number = 5
+        val inboxStyle = NotificationCompat.InboxStyle()
+
+        inboxStyle.setBigContentTitle(context.getString(R.string.notif_big_inbox_title))
+        for (i in 1..number) {
+            inboxStyle.addLine(context.getString(R.string.notif_big_inbox_message, i))
+        }
+
+        inboxStyle.setSummaryText(context.getString(R.string.notif_big_inbox_summary))
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_favorite)
+            .setColor(ActivityCompat.getColor(context, R.color.colorAccent))
+            .setContentTitle(context.getString(R.string.notif_title))
+            .setContentText(context.getString(R.string.notif_reply_replied))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setNumber(number)
+            .setStyle(inboxStyle)
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.notify(8, notificationBuilder.build())
+    }
+
     fun notificationHeadsUp(context: Context) {}
 
 }
