@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme">
 
         <receiver android:name=".NotificationActionReceiver" />
+        <receiver android:name=".ReplyReceiver" />
 
         <activity
             android:name=".DetailActivity"
