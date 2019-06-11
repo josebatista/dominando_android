@@ -12,6 +12,7 @@
 
         <receiver android:name=".NotificationActionReceiver" />
         <receiver android:name=".ReplyReceiver" />
+        <receiver android:name=".DeleteNotificationReceiver" />
 
         <activity
             android:name=".DetailActivity"

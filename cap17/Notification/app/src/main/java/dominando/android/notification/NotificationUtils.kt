@@ -38,6 +38,13 @@ object NotificationUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(context)
         }
+
+        //criando pendindintent que ira disparar o broadcast ao remover uma notificacao
+        val deletePit = PendingIntent.getBroadcast(
+            context, 0,
+            Intent(context, DeleteNotificationReceiver::class.java), 0
+        )
+
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_favorite)
             .setContentTitle(context.getString(R.string.notif_title))
@@ -45,6 +52,7 @@ object NotificationUtils {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setColor(ActivityCompat.getColor(context, R.color.colorAccent))
             .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setDeleteIntent(deletePit) // atribuido pending intent a notificacao.
 
         val notificationManager = NotificationManagerCompat.from(context)
         notificationManager.notify(1, notificationBuilder.build())
