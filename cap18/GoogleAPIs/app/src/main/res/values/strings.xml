@@ -36,4 +36,7 @@
 
     <string name="error_sync">Erro ao sincronizar com o servidor.</string>
 
+    <string name="error_play_services_not_supported">Google Play Services não disponível ou não suportado.</string>
+    <string name="error_login_failed">Falha ao efetuar login</string>
+
 </resources>
