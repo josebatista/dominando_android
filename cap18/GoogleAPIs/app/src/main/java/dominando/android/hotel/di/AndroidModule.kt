@@ -2,6 +2,8 @@ package dominando.android.hotel.di
 
 import android.content.Context
 import com.google.gson.GsonBuilder
+import dominando.android.hotel.auth.Auth
+import dominando.android.hotel.auth.AuthManager
 import dominando.android.hotel.details.HotelDetailsViewModel
 import dominando.android.hotel.form.HotelFormViewModel
 import dominando.android.hotel.list.HotelListViewModel
@@ -68,6 +70,15 @@ val androidModule = module {
             pictureFinder = get(),
             currentUser = "jbp"
         )
+    }
+
+    single {
+        val manager: AuthManager = get()
+        manager as Auth
+    }
+
+    single {
+        AuthManager(context = get())
     }
 
 }

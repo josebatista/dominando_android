@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import dominando.android.hotel.R
 import dominando.android.hotel.details.HotelDetailsActivity
@@ -16,7 +15,7 @@ import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.activity_hotel.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HotelActivity : AppCompatActivity(),
+class HotelActivity : BaseActivity(),
     HotelListFragment.OnHotelClickListener,
     SearchView.OnQueryTextListener,
     MenuItem.OnActionExpandListener {
