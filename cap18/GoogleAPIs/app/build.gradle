@@ -37,6 +37,8 @@ dependencies {
 
     implementation "androidx.work:work-runtime:$workmanager_version"
 
+    implementation "com.google.android.gms:play-services-auth:$playservices_version"
+
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.room:room-runtime:$room_version"
