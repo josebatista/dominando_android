@@ -68,7 +68,7 @@ val androidModule = module {
             service = get(),
             repository = get(),
             pictureFinder = get(),
-            currentUser = "jbp"
+            auth = get()
         )
     }
 
