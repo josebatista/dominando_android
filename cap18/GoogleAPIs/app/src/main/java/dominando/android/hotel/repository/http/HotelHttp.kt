@@ -1,6 +1,7 @@
 package dominando.android.hotel.repository.http
 
 import android.util.Log
+import dominando.android.hotel.auth.Auth
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 import dominando.android.hotel.repository.imagefiles.FindHotelPicture
@@ -11,8 +12,11 @@ class HotelHttp(
     private val service: HotelHttpApi,
     private val repository: HotelRepository,
     private val pictureFinder: FindHotelPicture,
-    private val currentUser: String
+    private val auth: Auth
 ) {
+
+    private val currentUser: String
+        get() = auth.getUserId() ?: ""
 
     fun synchronizeWithServer() {
         if (currentUser.isBlank()) {
