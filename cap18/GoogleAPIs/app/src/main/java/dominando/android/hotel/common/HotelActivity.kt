@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import dominando.android.hotel.R
+import dominando.android.hotel.auth.UserProfileFragment
 import dominando.android.hotel.details.HotelDetailsActivity
 import dominando.android.hotel.details.HotelDetailsFragment
 import dominando.android.hotel.form.HotelFormFragment
@@ -61,6 +62,9 @@ class HotelActivity : BaseActivity(),
         when (item?.itemId) {
             R.id.action_info -> {
                 AboutDialogFragment().show(supportFragmentManager, "sobre")
+            }
+            R.id.action_user_profile -> {
+                UserProfileFragment().open(supportFragmentManager)
             }
         }
         return super.onOptionsItemSelected(item)

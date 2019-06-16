@@ -15,7 +15,7 @@ abstract class BaseActivity : AppCompatActivity() {
         verifyUserLoggedIn()
     }
 
-    private fun verifyUserLoggedIn() {
+    fun verifyUserLoggedIn() {
         val account = authManager.getUserAccount()
         if (account == null) {
             startActivity(Intent(this, LoginActivity::class.java).apply {

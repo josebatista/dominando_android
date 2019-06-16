@@ -12,6 +12,11 @@
         app:showAsAction="collapseActionView|ifRoom" />
 
     <item
+        android:id="@+id/action_user_profile"
+        android:title="@string/action_user_profile"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_info"
         android:icon="@android:drawable/ic_menu_info_details"
         android:title="@string/action_info"
