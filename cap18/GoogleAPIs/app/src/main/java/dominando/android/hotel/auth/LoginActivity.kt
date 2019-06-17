@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.messaging.FirebaseMessaging
 import dominando.android.hotel.R
 import dominando.android.hotel.common.HotelActivity
 import kotlinx.android.synthetic.main.activity_login.*
@@ -63,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
             GoogleSignIn.getSignedInAccountFromIntent(intent).getResult(ApiException::class.java)
             startActivity(Intent(this, HotelActivity::class.java))
             finish()
+            FirebaseMessaging.getInstance().subscribeToTopic("hotel_sync")
         } catch (e: Exception) {
             Toast.makeText(this, R.string.error_login_failed, Toast.LENGTH_SHORT).show()
         }

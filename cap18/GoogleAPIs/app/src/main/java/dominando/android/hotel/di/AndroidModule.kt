@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import dominando.android.hotel.auth.Auth
 import dominando.android.hotel.auth.AuthManager
 import dominando.android.hotel.details.HotelDetailsViewModel
+import dominando.android.hotel.fcm.TokenManager
 import dominando.android.hotel.form.HotelFormViewModel
 import dominando.android.hotel.list.HotelListViewModel
 import dominando.android.hotel.repository.HotelRepository
@@ -79,6 +80,10 @@ val androidModule = module {
 
     single {
         AuthManager(context = get())
+    }
+
+    single {
+        TokenManager(context = get(), hotelHttp = get())
     }
 
 }

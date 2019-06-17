@@ -14,7 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".auth.LoginActivity"></activity>
+
+        <service android:name=".fcm.HotelFcmService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".auth.LoginActivity" />
         <activity
             android:name=".details.HotelDetailsActivity"
             android:parentActivityName=".common.HotelActivity" />
