@@ -43,9 +43,19 @@ interface HotelHttpApi {
         @Part file: MultipartBody.Part
     ): Call<UploadResult>
 
+    @FormUrlEncoded
+    @POST(FCM_SERVICE)
+    fun sendRegistrationId(
+        @Field("user") user: String,
+        @Field("regId") registrationId: String,
+        @Field("action") action: String = "register"
+    ): Call<Void>
+
+
     companion object {
         const val WEB_SERVICE = "webservice.php"
         const val UPLOAD = "upload.php"
+        const val FCM_SERVICE = "fcm_server.php"
     }
 
 }

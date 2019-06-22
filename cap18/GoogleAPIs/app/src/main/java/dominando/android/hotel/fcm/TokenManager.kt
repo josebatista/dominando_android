@@ -15,7 +15,7 @@ class TokenManager(
         sendRegistrationToServer()
     }
 
-    fun getRegistrationId(): String? {
+    private fun getRegistrationId(): String? {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(REGISTRATION_ID, null)
     }
 
@@ -37,8 +37,19 @@ class TokenManager(
             .apply()
     }
 
-    private fun sendRegistrationToServer() {
-        // TODO
+    fun sendRegistrationToServer() {
+        val regId = getRegistrationId()
+        if (!isSentToServer() && regId != null && regId.isNotBlank()) {
+            Thread {
+                try {
+                    if (hotelHttp.sendRegistrationToken(regId)) {
+                        setSentToServer(true)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }.start()
+        }
     }
 
 

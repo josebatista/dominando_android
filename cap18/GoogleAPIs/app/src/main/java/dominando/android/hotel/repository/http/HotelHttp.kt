@@ -27,6 +27,11 @@ class HotelHttp(
         }
     }
 
+    fun sendRegistrationToken(token: String): Boolean {
+        return currentUser.isNotBlank() && token.isNotBlank() &&
+                service.sendRegistrationId(currentUser, token).execute().isSuccessful
+    }
+
     private fun sendPendingData() {
         val pendingHotels = repository.pending()
         pendingHotels.forEach { hotel ->
@@ -70,8 +75,7 @@ class HotelHttp(
 
     private fun uploadHotelPhoto(hotel: Hotel) {
         if (hotel.photoUrl.isNotEmpty() && hotel.photoUrl.startsWith("content:")) {
-            val execution = uploadFile(hotel)
-            when (execution) {
+            when (uploadFile(hotel)) {
                 is UploadResult -> {
                     Log.d("JBP", "Upload realizado com sucesso")
                 }
