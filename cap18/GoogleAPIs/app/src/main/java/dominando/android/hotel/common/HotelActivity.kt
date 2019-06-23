@@ -5,6 +5,8 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import dominando.android.hotel.R
 import dominando.android.hotel.auth.UserProfileFragment
 import dominando.android.hotel.details.HotelDetailsActivity
@@ -37,6 +39,32 @@ class HotelActivity : BaseActivity(),
             listFragment.hideDeleteMode()
             HotelFormFragment.newInstance().open(supportFragmentManager)
         }
+
+        initAdMob()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adView.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        adView.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adView.destroy()
+    }
+
+    private fun initAdMob() {
+        MobileAds.initialize(this, getString(R.string.admob_adunit_id))
+        val adRequest = AdRequest.Builder()
+            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) //permite testar no emulador
+            //.addTestDevice("TEST_DEVICE_ID") //use o adb devices para obter o id do aparelho de teste
+            .build()
+        adView.loadAd(adRequest)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -45,4 +45,11 @@
 
     <string name="notification_text">Lista de Hoteis atualizada!</string>
 
+    <string name="admob_app_id" translatable="false">ca-app-pub-4732413594343071~7827373265</string>
+    <string name="admob_adunit_id" translatable="false">ca-app-pub-4732413594343071/6131148211</string>
+
+    <!--Disponibilizado pelo Google para testar se foi implementado corretamente-->
+    <!--<string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>-->
+    <!--<string name="admob_adunit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>-->
+
 </resources>
