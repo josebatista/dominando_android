@@ -41,6 +41,7 @@ dependencies {
     implementation "com.google.firebase:firebase-messaging:$firebase_messaging_version"
 
     implementation "com.google.android.gms:play-services-auth:$playservices_version"
+    implementation "com.google.android.gms:play-services-ads:$admob_version"
 
     implementation "androidx.lifecycle:lifecycle-extensions:${lifecycle_version}"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
