@@ -25,9 +25,12 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.findFragmentById(R.id.fragmentMap) as AppMapFragment
     }
 
+    private var isGpsDialogOpened: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        isGpsDialogOpened = savedInstanceState?.getBoolean(EXTRA_GPS_DIALOG) ?: false
     }
 
     override fun onStart() {
@@ -43,10 +46,23 @@ class MainActivity : AppCompatActivity() {
         viewModel.disconnectGoogleApiClient()
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putBoolean(EXTRA_GPS_DIALOG, isGpsDialogOpened)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_ERROR_PLAY_SERVICES && resultCode == Activity.RESULT_OK) {
             viewModel.connectGoogleApiClient()
+        } else if (requestCode == REQUEST_CHECK_GPS) {
+            isGpsDialogOpened = false
+            if (resultCode == Activity.RESULT_OK) {
+                loadLastLocation()
+            } else {
+                Toast.makeText(this, R.string.map_error_gps_disabled, Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 
@@ -87,6 +103,14 @@ class MainActivity : AppCompatActivity() {
             when (error) {
                 is MapViewModel.LocationError.ErrorLocationUnavailable ->
                     showError(R.string.map_error_get_current_location)
+                is MapViewModel.LocationError.GpsDisabled -> {
+                    if (!isGpsDialogOpened) {
+                        isGpsDialogOpened = true
+                        error.exception.startResolutionForResult(this, REQUEST_CHECK_GPS)
+                    }
+                }
+                is MapViewModel.LocationError.GpsSettingUnavailable ->
+                    showError(R.string.map_error_gps_settings)
             }
         }
     }
@@ -133,5 +157,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_ERROR_PLAY_SERVICES = 1
         private const val REQUEST_PERMISSIONS = 2
+        private const val REQUEST_CHECK_GPS = 3
+        private const val EXTRA_GPS_DIALOG = "gpsDialogIsOpen"
     }
 }

@@ -2,14 +2,16 @@ package dominando.android.mapas
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.location.Location
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -82,18 +84,67 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
 
     @SuppressLint("MissingPermission")
     private suspend fun loadLastLocation(): Boolean = suspendCoroutine { continuation ->
+
+        fun updateOriginByLocation(location: Location) {
+            val latLng = LatLng(location.latitude, location.longitude)
+            mapState.value = mapState.value?.copy(origin = latLng)
+            continuation.resume(true)
+        }
+
+        fun waitForLocation() {
+            val locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5 * 1000)
+                .setFastestInterval(1 * 1000)
+
+            locationClient.requestLocationUpdates(locationRequest,
+                object : LocationCallback() {
+                    override fun onLocationResult(result: LocationResult?) {
+                        super.onLocationResult(result)
+                        locationClient.removeLocationUpdates(this)
+                        val location = result?.lastLocation
+                        if (location != null) {
+                            updateOriginByLocation(location)
+                        } else {
+                            continuation.resume(false)
+                        }
+                    }
+                }
+                , null)
+        }
+
         locationClient.lastLocation
             .addOnSuccessListener { location ->
-                if (location != null) {
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    mapState.value = mapState.value?.copy(origin = latLng)
-                    continuation.resume(true)
+                if (location == null) {
+                    waitForLocation()
                 } else {
-                    continuation.resume(false)
+                    updateOriginByLocation(location)
                 }
             }
             .addOnFailureListener {
+                waitForLocation()
+            }
+            .addOnCanceledListener {
                 continuation.resume(false)
+            }
+    }
+
+    private suspend fun checkGpsStatus(): Boolean = suspendCoroutine { continuation ->
+        val request = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
+        val locationSettingRequest = LocationSettingsRequest.Builder()
+            .setAlwaysShow(true)
+            .addLocationRequest(request)
+
+        SettingsClient(getContext()).checkLocationSettings(locationSettingRequest.build())
+            .addOnCompleteListener { task ->
+                try {
+                    task.getResult(ApiException::class.java)
+                    continuation.resume(true)
+                } catch (e: ApiException) {
+                    continuation.resume(false)
+                }
             }
             .addOnCanceledListener {
                 continuation.resume(false)
@@ -103,14 +154,24 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     fun requestLocation() {
         launch {
             currentLocationError.value = try {
-                val success = withContext(Dispatchers.Default) { loadLastLocation() }
+                checkGpsStatus()
+                val success = withTimeout(20000) { loadLastLocation() }
                 if (success) {
                     null
                 } else {
                     LocationError.ErrorLocationUnavailable
                 }
-            } catch (e: Exception) {
+            } catch (timeout: TimeoutCancellationException) {
                 LocationError.ErrorLocationUnavailable
+            } catch (exception: ApiException) {
+                when (exception.statusCode) {
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->
+                        LocationError.GpsDisabled(exception as ResolvableApiException)
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE ->
+                        LocationError.GpsSettingUnavailable
+                    else ->
+                        LocationError.ErrorLocationUnavailable
+                }
             }
         }
     }
@@ -129,5 +190,7 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
 
     sealed class LocationError {
         object ErrorLocationUnavailable : LocationError()
+        data class GpsDisabled(val exception: ResolvableApiException) : LocationError()
+        object GpsSettingUnavailable : LocationError()
     }
 }
