@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragmentMap"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:name="dominando.android.mapas.AppMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

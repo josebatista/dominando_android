@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Mapas</string>
+
+    <string name="map_error_permissions">Você deve aceitar as permissões para executar a aplicação.</string>
+    <string name="map_error_get_current_location">Erro ao obter a localização atual.</string>
 </resources>
