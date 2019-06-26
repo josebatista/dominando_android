@@ -2,10 +2,14 @@ package dominando.android.mapas
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Address
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +18,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_loading.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -96,6 +102,28 @@ class MainActivity : AppCompatActivity() {
         viewModel.getCurrentLocationError().observe(this, Observer { error ->
             handleLocationError(error)
         })
+
+        viewModel.isLoading().observe(this, Observer { value ->
+            if (value != null) {
+                btnSearch.isEnabled = !value
+                if (value) {
+                    showProgress(getString(R.string.map_msg_search_address))
+                } else {
+                    hideProgress()
+                }
+            }
+        })
+
+        viewModel.getAddress().observe(this, Observer { address ->
+            if (address != null) {
+                showAddressDialog(address)
+            }
+        })
+
+        btnSearch.setOnClickListener {
+            searchAddress()
+        }
+
     }
 
     private fun handleLocationError(error: MapViewModel.LocationError?) {
@@ -152,6 +180,25 @@ class MainActivity : AppCompatActivity() {
         GoogleApiAvailability.getInstance()
             .getErrorDialog(this, errorCode, REQUEST_ERROR_PLAY_SERVICES)
             .show()
+    }
+
+    private fun searchAddress() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(edtSearch.windowToken, 0)
+        viewModel.searchAddress(edtSearch.text.toString())
+    }
+
+    private fun showProgress(message: String) {
+        txtProgress.text = message
+        llProgress.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        llProgress.visibility = View.GONE
+    }
+
+    private fun showAddressDialog(addresses: List<Address>) {
+        AddressListFragment.getInstance(addresses).show(supportFragmentManager, null)
     }
 
     companion object {

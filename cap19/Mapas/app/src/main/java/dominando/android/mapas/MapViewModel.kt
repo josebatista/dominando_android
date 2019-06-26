@@ -2,6 +2,8 @@ package dominando.android.mapas
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
@@ -14,6 +16,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.*
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -35,6 +38,9 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     private val mapState = MutableLiveData<MapState>().apply {
         value = MapState()
     }
+
+    private val address = MutableLiveData<List<Address>?>()
+    private val loading = MutableLiveData<Boolean>()
 
     override fun onCleared() {
         super.onCleared()
@@ -178,9 +184,34 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
 
     private fun getContext() = getApplication<Application>()
 
+    fun getAddress(): LiveData<List<Address>?> = address
+
+    fun isLoading(): LiveData<Boolean> = loading
+
+    fun searchAddress(s: String) {
+        launch {
+            loading.value = true
+            val geoCoder = Geocoder(getContext(), Locale.getDefault())
+            address.value = withContext(Dispatchers.IO) {
+                geoCoder.getFromLocationName(s, 10)
+            }
+            loading.value = false
+        }
+    }
+
+    fun clearAddressResult() {
+        this.address.value = null
+    }
+
+    fun setDestination(latLng: LatLng) {
+        address.value = null
+        mapState.value = mapState.value?.copy(destination = latLng)
+    }
+
     // Data classes...
     data class MapState(
-        val origin: LatLng? = null
+        val origin: LatLng? = null,
+        val destination: LatLng? = null
     )
 
     data class GoogleApiConnectionStatus(
