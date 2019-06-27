@@ -19,6 +19,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -28,6 +32,8 @@ dependencies {
     def playServices_version = "17.0.0"
     def lifecycle_version = "2.0.0"
     def coroutines_version = "1.2.2"
+    def okHttp_version = "3.14.2"
+    def mapUtils_version = "0.5"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -47,6 +53,12 @@ dependencies {
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+    //okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
+
+    //map utils
+    implementation "com.google.maps.android:android-maps-utils:$mapUtils_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

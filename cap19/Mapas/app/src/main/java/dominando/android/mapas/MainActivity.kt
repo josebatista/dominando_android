@@ -120,6 +120,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.isLoadingRoute().observe(this, Observer { value ->
+            if (value != null) {
+                btnSearch.isEnabled = !value
+                if (value) {
+                    showProgress(getString(R.string.map_msg_search_route))
+                } else {
+                    hideProgress()
+                }
+            }
+        })
+
         btnSearch.setOnClickListener {
             searchAddress()
         }

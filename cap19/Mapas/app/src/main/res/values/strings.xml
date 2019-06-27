@@ -12,4 +12,6 @@
     <string name="map_marker_origin">Origem</string>
     <string name="map_marker_destination">Destino</string>
     <string name="map_current_location">Local atual</string>
+
+    <string name="map_msg_search_route">Traçando rota…</string>
 </resources>

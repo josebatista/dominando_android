@@ -1,5 +1,6 @@
 package dominando.android.mapas
 
+import android.graphics.Color
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 
 class AppMapFragment : SupportMapFragment() {
 
@@ -62,6 +64,17 @@ class AppMapFragment : SupportMapFragment() {
                 area.include(destination)
             }
 
+            val route = mapState.route
+            if (route != null && route.isNotEmpty()) {
+                val polyLineOptions = PolylineOptions()
+                    .addAll(route)
+                    .width(5f)
+                    .color(Color.RED)
+                    .visible(true)
+                addPolyline(polyLineOptions)
+                route.forEach { area.include(it) }
+            }
+
             if (origin != null) {
                 if (destination != null) {
                     animateCamera(CameraUpdateFactory.newLatLngBounds(area.build(), 50))
@@ -69,6 +82,7 @@ class AppMapFragment : SupportMapFragment() {
                     animateCamera(CameraUpdateFactory.newLatLngZoom(origin, 17f))
                 }
             }
+
         }
     }
 

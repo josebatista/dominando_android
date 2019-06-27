@@ -41,6 +41,7 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
 
     private val address = MutableLiveData<List<Address>?>()
     private val loading = MutableLiveData<Boolean>()
+    private val loadingRoute = MutableLiveData<Boolean>()
 
     override fun onCleared() {
         super.onCleared()
@@ -206,12 +207,35 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     fun setDestination(latLng: LatLng) {
         address.value = null
         mapState.value = mapState.value?.copy(destination = latLng)
+        loadRoute()
+    }
+
+    fun isLoadingRoute(): LiveData<Boolean> = loadingRoute
+
+    private fun loadRoute() {
+        if (mapState.value != null) {
+            val orig = mapState.value?.origin
+            val dest = mapState.value?.destination
+            if (orig != null && dest != null) {
+                launch {
+                    loadingRoute.value = true
+
+                    val route = withContext(Dispatchers.IO) {
+                        RouteHttp.searchRoute(orig, dest)
+                    }
+
+                    mapState.value = mapState.value?.copy(route = route)
+                    loadingRoute.value = false
+                }
+            }
+        }
     }
 
     // Data classes...
     data class MapState(
         val origin: LatLng? = null,
-        val destination: LatLng? = null
+        val destination: LatLng? = null,
+        val route: List<LatLng>? = null
     )
 
     data class GoogleApiConnectionStatus(
