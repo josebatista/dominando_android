@@ -2,6 +2,7 @@ package dominando.android.mapas
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.PendingIntent
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -44,6 +45,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     private val loadingRoute = MutableLiveData<Boolean>()
 
     private val currentLocation = MutableLiveData<LatLng>()
+
+    private val geofenceDB: GeofenceDB by lazy { GeofenceDB(getContext()) }
 
     override fun onCleared() {
         super.onCleared()
@@ -260,11 +263,40 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
             .removeLocationUpdates(locationCallback)
     }
 
+    @SuppressLint("MissingPermission")
+    fun setGeofence(pit: PendingIntent, latLng: LatLng) {
+        if (googleApiClient?.isConnected == true) {
+            val geofenceInfo = GeofenceInfo(
+                "1",
+                latLng.latitude,
+                latLng.longitude,
+                500f, // em metros
+                Geofence.NEVER_EXPIRE,
+                Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT
+            )
+
+            val request = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofences(listOf(geofenceInfo.getGeofence()))
+                .build()
+
+            LocationServices.getGeofencingClient(getContext())
+                .addGeofences(request, pit)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        geofenceDB.saveGeofence(geofenceInfo)
+                        mapState.value = mapState.value?.copy(geofenceInfo = geofenceInfo)
+                    }
+                }
+        }
+    }
+
     // Data classes...
     data class MapState(
         val origin: LatLng? = null,
         val destination: LatLng? = null,
-        val route: List<LatLng>? = null
+        val route: List<LatLng>? = null,
+        val geofenceInfo: GeofenceInfo? = null
     )
 
     data class GoogleApiConnectionStatus(

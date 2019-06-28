@@ -1,5 +1,7 @@
 package dominando.android.mapas
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.graphics.Color
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -32,6 +34,9 @@ class AppMapFragment : SupportMapFragment() {
             mapType = GoogleMap.MAP_TYPE_NORMAL
             uiSettings.isMapToolbarEnabled = false
             uiSettings.isZoomControlsEnabled = true
+            setOnMapLongClickListener { latLng ->
+                onMapLongClick(latLng)
+            }
         }
         viewModel.getMapState().observe(this, Observer { mapState ->
             if (mapState != null) {
@@ -53,6 +58,15 @@ class AppMapFragment : SupportMapFragment() {
                 markerCurrentPosition?.position = currentLocation
             }
         })
+    }
+
+    private fun onMapLongClick(latLng: LatLng) {
+        val pit = PendingIntent.getBroadcast(
+            requireContext(), 0,
+            Intent(requireContext(), GeofenceReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        viewModel.setGeofence(pit, latLng)
     }
 
     private fun updateMap(mapState: MapViewModel.MapState) {
@@ -97,6 +111,18 @@ class AppMapFragment : SupportMapFragment() {
                 } else {
                     animateCamera(CameraUpdateFactory.newLatLngZoom(origin, 17f))
                 }
+            }
+
+            val geofenceInfo = mapState.geofenceInfo
+            if (geofenceInfo != null) {
+                val latLng = LatLng(geofenceInfo.latitude, geofenceInfo.longitude)
+                addCircle(
+                    CircleOptions()
+                        .strokeWidth(2f)
+                        .fillColor(0x990000FF.toInt())
+                        .center(latLng)
+                        .radius(geofenceInfo.radius.toDouble())
+                )
             }
 
         }
