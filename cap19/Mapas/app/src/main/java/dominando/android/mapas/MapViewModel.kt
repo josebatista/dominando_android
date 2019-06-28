@@ -43,6 +43,8 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
     private val loading = MutableLiveData<Boolean>()
     private val loadingRoute = MutableLiveData<Boolean>()
 
+    private val currentLocation = MutableLiveData<LatLng>()
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -164,6 +166,7 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
                 checkGpsStatus()
                 val success = withTimeout(20000) { loadLastLocation() }
                 if (success) {
+                    startLocationUpdate()
                     null
                 } else {
                     LocationError.ErrorLocationUnavailable
@@ -229,6 +232,32 @@ class MapViewModel(app: Application) : AndroidViewModel(app), CoroutineScope {
                 }
             }
         }
+    }
+
+    fun getCurrentLocation(): LiveData<LatLng> = currentLocation
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult?) {
+            val location = result?.lastLocation
+            if (location != null) {
+                currentLocation.value = LatLng(location.latitude, location.longitude)
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdate() {
+        val locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setInterval(5 * 1000)
+            .setFastestInterval(1 * 1000)
+
+        locationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    fun stopLocationUpdate() {
+        LocationServices.getFusedLocationProviderClient(getContext())
+            .removeLocationUpdates(locationCallback)
     }
 
     // Data classes...

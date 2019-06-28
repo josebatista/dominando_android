@@ -7,9 +7,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 
 class AppMapFragment : SupportMapFragment() {
 
@@ -18,6 +16,8 @@ class AppMapFragment : SupportMapFragment() {
     }
 
     private var googleMap: GoogleMap? = null
+
+    private var markerCurrentPosition: Marker? = null
 
     override fun getMapAsync(callback: OnMapReadyCallback?) {
         super.getMapAsync {
@@ -38,11 +38,27 @@ class AppMapFragment : SupportMapFragment() {
                 updateMap(mapState)
             }
         })
+
+        viewModel.getCurrentLocation().observe(this, Observer { currentLocation ->
+            if (currentLocation != null) {
+                if (markerCurrentPosition == null) {
+                    val icon = BitmapDescriptorFactory.fromResource(R.drawable.blue_marker)
+                    markerCurrentPosition = googleMap?.addMarker(
+                        MarkerOptions()
+                            .title(getString(R.string.map_current_location))
+                            .icon(icon)
+                            .position(currentLocation)
+                    )
+                }
+                markerCurrentPosition?.position = currentLocation
+            }
+        })
     }
 
     private fun updateMap(mapState: MapViewModel.MapState) {
         googleMap?.run {
             clear()
+            markerCurrentPosition = null
             val area = LatLngBounds.Builder()
             val origin = mapState.origin
             if (origin != null) {

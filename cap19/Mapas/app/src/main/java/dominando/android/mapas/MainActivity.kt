@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         viewModel.disconnectGoogleApiClient()
+        viewModel.stopLocationUpdate()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
