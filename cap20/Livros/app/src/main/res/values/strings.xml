@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Livros</string>
+
+    <string name="text_format_book_pages">Número de páginas: %1$d</string>
+    <string name="text_format_book_year">Ano de publicação: %1$d</string>
+    <string name="text_book_available">Disponível</string>
+    <string name="text_book_unavailable">Indisponível</string>
+
 </resources>
