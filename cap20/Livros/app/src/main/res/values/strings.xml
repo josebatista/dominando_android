@@ -6,4 +6,7 @@
     <string name="text_book_available">Disponível</string>
     <string name="text_book_unavailable">Indisponível</string>
 
+    <string name="text_book_media_ebook">E-Book</string>
+    <string name="text_book_media_paper">Impresso</string>
+
 </resources>
