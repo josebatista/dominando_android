@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -20,14 +21,14 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!--<ImageView>
+            <ImageView
                 android:id="@+id/imgCover"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:background="#CCC"
                 android:scaleType="centerInside"
-                app:urlImage="@{book.coverUrl}"/> -->
+                app:urlImage="@{book.coverUrl}" />
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -69,11 +70,11 @@
                 android:layout_height="wrap_content"
                 android:text="@{book.available ? @string/text_book_available : @string/text_book_unavailable}" />
 
-            <!--<TextView
+            <TextView
                 android:id="@+id/txtMediaType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{book.mediaType}" /> -->
+                android:text="@{book.mediaType}" />
 
             <RatingBar
                 android:id="@+id/rtbRating"
