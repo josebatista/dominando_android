@@ -3,13 +3,14 @@ package dominando.android.livros
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import dominando.android.livros.databinding.ActivityBookDetailsBinding
 import dominando.android.livros.model.Book
 import org.parceler.Parcels
 
-class BookDetailsActivity : AppCompatActivity() {
+class BookDetailsActivity : BaseActivity() {
+
+    override fun init() {}
 
     private val binding: ActivityBookDetailsBinding by lazy {
         DataBindingUtil.setContentView<ActivityBookDetailsBinding>(

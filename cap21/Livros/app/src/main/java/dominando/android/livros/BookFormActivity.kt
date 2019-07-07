@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import dominando.android.livros.databinding.ActivityBookFormBinding
 import dominando.android.livros.model.Book
@@ -14,7 +13,9 @@ import dominando.android.livros.model.MediaType
 import dominando.android.livros.model.Publisher
 import org.parceler.Parcels
 
-class BookFormActivity : AppCompatActivity() {
+class BookFormActivity : BaseActivity() {
+
+    override fun init() {}
 
     private val binding: ActivityBookFormBinding by lazy {
         DataBindingUtil.setContentView<ActivityBookFormBinding>(this, R.layout.activity_book_form)

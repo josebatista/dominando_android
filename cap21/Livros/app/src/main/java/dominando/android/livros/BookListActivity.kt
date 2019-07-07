@@ -1,14 +1,15 @@
 package dominando.android.livros
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import dominando.android.livros.model.Book
 import dominando.android.livros.model.MediaType
 import dominando.android.livros.model.Publisher
 import kotlinx.android.synthetic.main.activity_book_list.*
 
-class BookListActivity : AppCompatActivity() {
+class BookListActivity : BaseActivity() {
+
+    override fun init() {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
