@@ -7,15 +7,41 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import dominando.android.livros.databinding.ActivityBookFormBinding
 import dominando.android.livros.model.Book
 import dominando.android.livros.model.MediaType
 import dominando.android.livros.model.Publisher
+import dominando.android.livros.viewmodel.BookFormViewModel
+import kotlinx.android.synthetic.main.book_form_content.*
 import org.parceler.Parcels
 
 class BookFormActivity : BaseActivity() {
 
-    override fun init() {}
+    private val viewModel: BookFormViewModel by lazy {
+        ViewModelProviders.of(this).get(BookFormViewModel::class.java)
+    }
+
+    override fun init() {
+        viewModel.showProgress().observe(this, Observer { loading ->
+            loading?.let {
+                btnSave.isEnabled = !loading
+                binding.content.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        })
+        viewModel.savingOperation().observe(this, Observer { success ->
+            success?.let {
+                if (success) {
+                    showMessageSuccess()
+                    finish()
+                } else {
+                    showMessageError()
+                }
+            }
+        })
+
+    }
 
     private val binding: ActivityBookFormBinding by lazy {
         DataBindingUtil.setContentView<ActivityBookFormBinding>(this, R.layout.activity_book_form)
@@ -57,17 +83,20 @@ class BookFormActivity : BaseActivity() {
     fun clickSaveBook(view: View) {
         val book = binding.content.book
         if (book != null) {
-            val s = "${book.title}\n" +
-                    "${book.author}\n" +
-                    "${book.publisher?.name}\n" +
-                    "${book.pages}\n" +
-                    "${book.year}\n" +
-                    "${book.available}\n" +
-                    "${book.rating}\n" +
-                    "${book.mediaType}"
-
-            Toast.makeText(this, s, Toast.LENGTH_LONG).show()
+            try {
+                viewModel.saveBook(book)
+            } catch (e: Exception) {
+                showMessageError()
+            }
         }
+    }
+
+    private fun showMessageSuccess() {
+        Toast.makeText(this, R.string.message_book_saved, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showMessageError() {
+        Toast.makeText(this, R.string.message_error_book_saved, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
