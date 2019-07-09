@@ -43,6 +43,51 @@ class FbRepository {
             }
         }
     }
+//    Metodo simples utilizando get() que nao atualiza quando os dados sao modificados no servidor.
+//    fun loadBooks(): LiveData<List<Book>> {
+//        return object : LiveData<List<Book>>() {
+//            override fun onActive() {
+//                super.onActive()
+//                firestore.collection(BOOKS_KEY)
+//                    .whereEqualTo(USER_ID_KEY, currentUser?.uid)
+//                    .get()
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            val books = task.result?.map { document ->
+//                                val book = document.toObject(Book::class.java)
+//                                book.id = document.id
+//                                book
+//                            }
+//                            value = books
+//                        } else {
+//                            throw Exception(task.exception)
+//                        }
+//                    }
+//            }
+//        }
+//    }
+
+    fun loadBooks(): LiveData<List<Book>> {
+        return object : LiveData<List<Book>>() {
+            override fun onActive() {
+                super.onActive()
+                firestore.collection(BOOKS_KEY)
+                    .whereEqualTo(USER_ID_KEY, currentUser?.uid)
+                    .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                        if (firebaseFirestoreException == null) {
+                            val books = querySnapshot?.map { document ->
+                                val book = document.toObject(Book::class.java)
+                                book.id = document.id
+                                book
+                            }
+                            value = books
+                        } else {
+                            throw firebaseFirestoreException
+                        }
+                    }
+            }
+        }
+    }
 
     companion object {
         const val BOOKS_KEY = "books"

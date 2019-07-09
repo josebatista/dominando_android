@@ -22,4 +22,6 @@
     <string name="message_book_saved">Livro salvo com sucesso</string>
     <string name="message_error_book_saved">Erro ao salvar livro.</string>
 
+    <string name="message_error_load_books">Erro ao carregar listagem de livros.</string>
+
 </resources>
