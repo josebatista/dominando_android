@@ -1,5 +1,6 @@
 package dominando.android.livros
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -32,6 +33,10 @@ class BookListActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_list)
+
+        fabAdd.setOnClickListener {
+            startActivity(Intent(this, BookFormActivity::class.java))
+        }
 
 //        BookDetailsActivity.start(
 //            this,

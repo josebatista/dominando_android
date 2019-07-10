@@ -89,6 +89,28 @@ class FbRepository {
         }
     }
 
+    fun loadBook(bookId: String): LiveData<Book> {
+        return object : LiveData<Book>() {
+            override fun onActive() {
+                super.onActive()
+                firestore.collection(BOOKS_KEY)
+                    .document(bookId)
+                    .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                        if (firebaseFirestoreException == null) {
+                            if (documentSnapshot != null) {
+                                val book = documentSnapshot.toObject(Book::class.java)
+                                book?.id = documentSnapshot.id
+                                value = book
+                            }
+                        } else {
+                            throw firebaseFirestoreException
+                        }
+                    }
+            }
+        }
+    }
+
+
     companion object {
         const val BOOKS_KEY = "books"
         const val USER_ID_KEY = "userId"
