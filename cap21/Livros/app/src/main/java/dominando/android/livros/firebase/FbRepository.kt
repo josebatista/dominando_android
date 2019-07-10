@@ -110,6 +110,19 @@ class FbRepository {
         }
     }
 
+    fun remove(book: Book): LiveData<Boolean> {
+        return object : LiveData<Boolean>() {
+            override fun onActive() {
+                super.onActive()
+                firestore.collection(BOOKS_KEY)
+                    .document(book.id)
+                    .delete()
+                    .addOnCompleteListener {
+                        value = it.isSuccessful
+                    }
+            }
+        }
+    }
 
     companion object {
         const val BOOKS_KEY = "books"

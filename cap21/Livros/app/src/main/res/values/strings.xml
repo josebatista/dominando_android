@@ -26,4 +26,6 @@
 
     <string name="menu_action_edit">Editar</string>
 
+    <string name="message_error_delete_book">Erro ao excluir livro.</string>
+
 </resources>
