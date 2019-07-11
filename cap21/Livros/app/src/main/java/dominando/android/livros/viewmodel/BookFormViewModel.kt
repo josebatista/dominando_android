@@ -6,11 +6,13 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import dominando.android.livros.firebase.FbRepository
 import dominando.android.livros.model.Book
+import java.io.File
 
 class BookFormViewModel : ViewModel() {
 
     private val repo = FbRepository()
     var book: Book? = null
+    var tempImageFile: File? = null
 
     private var showProgress = MutableLiveData<Boolean>().apply {
         value = false
@@ -30,6 +32,19 @@ class BookFormViewModel : ViewModel() {
 
     fun saveBook(book: Book) {
         saveBook.value = book
+    }
+
+    fun deleteTempPhoto() {
+        tempImageFile?.let {
+            if (it.exists()) {
+                it.delete()
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        deleteTempPhoto()
     }
 
 }

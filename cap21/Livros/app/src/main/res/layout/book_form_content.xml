@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -26,6 +27,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imgCoverPhoto"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:background="@android:color/darker_gray"
+            android:onClick="@{view::clickTakePhoto}"
+            android:scaleType="centerInside"
+            app:urlImage="@{book.coverUrl}" />
 
         <EditText
             android:id="@+id/edtTitle"
