@@ -159,6 +159,13 @@ class FbRepository {
                 firestore.collection(BOOKS_KEY)
                     .document(book.id)
                     .delete()
+                    .continueWithTask { task ->
+                        if (task.isSuccessful) {
+                            storageRef.child(book.id).delete()
+                        } else {
+                            throw Exception(task.exception)
+                        }
+                    }
                     .addOnCompleteListener {
                         value = it.isSuccessful
                     }
