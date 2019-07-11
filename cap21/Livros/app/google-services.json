@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "554473104124",
+    "firebase_url": "https://livros-firebase-b4fd9.firebaseio.com",
+    "project_id": "livros-firebase-b4fd9",
+    "storage_bucket": "livros-firebase-b4fd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554473104124:android:df40fdcd36b7c4d8",
+        "android_client_info": {
+          "package_name": "dominando.android.livros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554473104124-m2g99oenvfprq29ein866dqb264v0hfh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dominando.android.livros",
+            "certificate_hash": "e9e06629871344afb8b1e96bec9620da7f0f2817"
+          }
+        },
+        {
+          "client_id": "554473104124-890hrcc1ouafcb3ht8d9h4thqua92m0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfzuM6RKANpSxcOh78JCPQlNoQ9HwEB_c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554473104124-890hrcc1ouafcb3ht8d9h4thqua92m0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

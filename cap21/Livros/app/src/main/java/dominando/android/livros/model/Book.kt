@@ -77,4 +77,6 @@ class Book : BaseObservable() {
             field = value
             notifyPropertyChanged(BR.rating)
         }
+
+    var userId: String = ""
 }
