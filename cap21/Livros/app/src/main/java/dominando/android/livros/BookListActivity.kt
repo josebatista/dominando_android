@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.auth.FirebaseAuth
 import dominando.android.livros.livedata.observeOnce
 import dominando.android.livros.model.Book
@@ -40,6 +41,9 @@ class BookListActivity : BaseActivity() {
         fabAdd.setOnClickListener {
             startActivity(Intent(this, BookFormActivity::class.java))
         }
+
+        //simular erro/crash
+//        Crashlytics.getInstance().crash()
 
 //        BookDetailsActivity.start(
 //            this,
