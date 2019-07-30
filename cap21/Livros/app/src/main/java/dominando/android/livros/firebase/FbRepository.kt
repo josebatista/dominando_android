@@ -123,8 +123,6 @@ class FbRepository {
                                 book
                             }
                             value = books
-                        } else {
-                            throw firebaseFirestoreException
                         }
                     }
             }
@@ -144,8 +142,6 @@ class FbRepository {
                                 book?.id = documentSnapshot.id
                                 value = book
                             }
-                        } else {
-                            throw firebaseFirestoreException
                         }
                     }
             }
@@ -159,16 +155,15 @@ class FbRepository {
                 firestore.collection(BOOKS_KEY)
                     .document(book.id)
                     .delete()
-                    .continueWithTask { task ->
-                        if (task.isSuccessful) {
-                            storageRef.child(book.id).delete()
-                        } else {
-                            throw Exception(task.exception)
+                    .addOnCompleteListener {
+                        if (book.coverUrl.isNotBlank()) {
+                            storageRef.child(book.id)
+                                .delete()
+                                .addOnSuccessListener { value = true }
+                                .addOnFailureListener { e -> throw e }
                         }
                     }
-                    .addOnCompleteListener {
-                        value = it.isSuccessful
-                    }
+                    .addOnFailureListener { e -> throw e }
             }
         }
     }
