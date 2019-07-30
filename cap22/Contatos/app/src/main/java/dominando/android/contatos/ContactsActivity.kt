@@ -3,6 +3,8 @@ package dominando.android.contatos
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -37,6 +39,27 @@ class ContactsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.contacts, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_new_contact) {
+            val fragment = ContactFragment()
+            fragment.show(supportFragmentManager, "new_contact")
+
+//            ContactUtils.insertContactWithApp(
+//                this,
+//                "Fulano",
+//                "88999000000",
+//                "josebatistapereira@gmail.com",
+//                "Rua da Pedra"
+//            )
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun hasPermission(permission: String): Boolean {
         return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
