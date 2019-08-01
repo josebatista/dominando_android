@@ -7,7 +7,7 @@ import java.io.IOException
 
 class BtThreadServer(private val btAdapter: BluetoothAdapter?, uiHandler: Handler) : BtThread(uiHandler) {
 
-    var serverSocket: BluetoothServerSocket? = null
+    private var serverSocket: BluetoothServerSocket? = null
 
     override fun run() {
         try {
