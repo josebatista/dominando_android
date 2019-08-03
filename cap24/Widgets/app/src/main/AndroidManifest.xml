@@ -22,5 +22,21 @@
 
         <receiver android:name=".FavoritesReceiver" />
 
+        <receiver
+            android:name=".TeamWidget"
+            android:label="@string/teams_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/teams_widget" />
+        </receiver>
+
+        <service
+            android:name=".TeamService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 </manifest>
