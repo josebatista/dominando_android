@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-//import android.preference.PreferenceManager
 import android.widget.RemoteViews
+import androidx.preference.PreferenceManager
 
 class FavoritesReceiver : BroadcastReceiver() {
 
@@ -82,26 +82,22 @@ class FavoritesReceiver : BroadcastReceiver() {
     }
 
     private fun getPosition(context: Context, appWidgetId: Int): Int {
-//        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val prefs = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         return prefs.getInt("$PREF_KEY_PREFIX$appWidgetId", 0)
     }
 
     private fun savePosition(context: Context, appWidgetId: Int, position: Int) {
-        //        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val prefs = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefs.edit().putInt("$PREF_KEY_PREFIX$appWidgetId", position).apply()
     }
 
     private fun remove(context: Context, appWidgetId: Int) {
-//        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val prefs = context.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefs.edit().remove("$PREF_KEY_PREFIX$appWidgetId").apply()
 
     }
 
     companion object {
-        private const val MY_PREF = "MyPrefs"
         private const val PREF_KEY_PREFIX = "widget_"
     }
 
