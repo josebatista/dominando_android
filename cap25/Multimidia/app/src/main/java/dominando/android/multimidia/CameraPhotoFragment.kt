@@ -1,14 +1,15 @@
 package dominando.android.multimidia
 
 import android.app.Activity
+import android.app.WallpaperManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.util.DisplayMetrics
+import android.view.*
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.fragment_camera_photo.*
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,9 @@ class CameraPhotoFragment : MultimidiaFragment(), ViewTreeObserver.OnGlobalLayou
         btnTakePhoto.setOnClickListener {
             openCamera()
         }
+        btnWallpaper.setOnClickListener {
+            setCurrentImageAsWallpaper()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -60,6 +64,30 @@ class CameraPhotoFragment : MultimidiaFragment(), ViewTreeObserver.OnGlobalLayou
         imageWidth = imgPhoto.width
         imageHeight = imgPhoto.height
         loadImage()
+    }
+
+    private fun setCurrentImageAsWallpaper() {
+        val path = photoFile
+        if (path != null) {
+            launch {
+                val windowsManager = requireActivity().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                val metrics = DisplayMetrics()
+                windowsManager.defaultDisplay.getMetrics(metrics)
+                val bitmap = withContext(Dispatchers.IO) {
+                    MediaUtils.loadImage(path, metrics.widthPixels, metrics.heightPixels)
+                }
+                if (bitmap != null) {
+                    try {
+                        withContext(Dispatchers.Default) {
+                            WallpaperManager.getInstance(activity).setBitmap(bitmap)
+                        }
+                        Toast.makeText(activity, "Papel de parede alterado", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
 
     private fun openCamera() {
