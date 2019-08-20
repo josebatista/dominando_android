@@ -28,7 +28,8 @@ abstract class MultimidiaFragment : Fragment(), CoroutineScope {
 
     protected fun hasPermission(): Boolean {
         val permission = listOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
         )
         return permission.all {
             ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
@@ -38,7 +39,8 @@ abstract class MultimidiaFragment : Fragment(), CoroutineScope {
     protected fun requestPermissions(requestCode: Int = REQUEST_CODE_PERMISSION) {
         requestPermissions(
             arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
             ), requestCode
         )
     }
