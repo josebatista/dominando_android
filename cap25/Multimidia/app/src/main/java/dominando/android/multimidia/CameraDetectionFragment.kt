@@ -1,6 +1,7 @@
 package dominando.android.multimidia
 
 //import com.google.android.gms.vision.barcode.BarcodeDetector
+//import com.google.android.gms.vision.face.FaceDetector
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
-import com.google.android.gms.vision.face.Face
-import com.google.android.gms.vision.face.FaceDetector
+import com.google.android.gms.vision.text.TextBlock
+import com.google.android.gms.vision.text.TextRecognizer
 import kotlinx.android.synthetic.main.fragment_camera_detection.*
 import java.io.IOException
 
@@ -30,18 +31,32 @@ class CameraDetectionFragment : MultimidiaFragment() {
 //    }
     //endregion
 
-    //region FaceDetector
-    private val detector: FaceDetector by lazy {
-        FaceDetector.Builder(activity)
-            .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
-            .setMode(FaceDetector.ACCURATE_MODE)
-            .setProminentFaceOnly(false)
-            .build()
+    //region Face Detector
+//    private val detector: FaceDetector by lazy {
+//        FaceDetector.Builder(activity)
+//            .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+//            .setMode(FaceDetector.ACCURATE_MODE)
+//            .setProminentFaceOnly(false)
+//            .build()
+//    }
+//
+//    private val cameraSource: CameraSource by lazy {
+//        CameraSource.Builder(activity, detector)
+//            .setFacing(CameraSource.CAMERA_FACING_FRONT)
+//            .setAutoFocusEnabled(true)
+//            .setRequestedPreviewSize(800, 512)
+//            .build()
+//    }
+    //endregion
+
+    //region Text Recognizer
+    private val detector: TextRecognizer by lazy {
+        TextRecognizer.Builder(activity).build()
     }
 
     private val cameraSource: CameraSource by lazy {
         CameraSource.Builder(activity, detector)
-            .setFacing(CameraSource.CAMERA_FACING_FRONT)
+            .setFacing(CameraSource.CAMERA_FACING_BACK)
             .setAutoFocusEnabled(true)
             .setRequestedPreviewSize(800, 512)
             .build()
@@ -107,25 +122,50 @@ class CameraDetectionFragment : MultimidiaFragment() {
     //endregion
 
     //region initProcessor Face
+//    private fun initProcessor() {
+//        detector.setProcessor(object : Detector.Processor<Face> {
+//            override fun release() {}
+//
+//            override fun receiveDetections(detections: Detector.Detections<Face>) {
+//                val faces = detections.detectedItems
+//                if (faces.size() != 0) {
+//                    var text = ""
+//                    for (index in 0 until faces.size()) {
+//                        val face = faces[index]
+//                        if (face != null) {
+//                            text += "Face: ${face.id}\n" +
+//                                    "Smiling: ${face.isSmilingProbability}\n" +
+//                                    "RightEye: ${face.isRightEyeOpenProbability}\n" +
+//                                    "LeftEye: ${face.isLeftEyeOpenProbability}"
+//                        }
+//                        txtBarCode.post {
+//                            txtBarCode.text = text
+//                        }
+//                    }
+//                }
+//            }
+//        })
+//    }
+    //endregion
+
+    //region initProcessor Text
     private fun initProcessor() {
-        detector.setProcessor(object : Detector.Processor<Face> {
+        detector.setProcessor(object : Detector.Processor<TextBlock> {
             override fun release() {}
 
-            override fun receiveDetections(detections: Detector.Detections<Face>) {
-                val faces = detections.detectedItems
-                if (faces.size() != 0) {
-                    var text = ""
-                    for (index in 0 until faces.size()) {
-                        val face = faces[index]
-                        if (face != null) {
-                            text += "Face: ${face.id}\n" +
-                                    "Smiling: ${face.isSmilingProbability}\n" +
-                                    "RightEye: ${face.isRightEyeOpenProbability}\n" +
-                                    "LeftEye: ${face.isLeftEyeOpenProbability}"
+            override fun receiveDetections(detections: Detector.Detections<TextBlock>) {
+                val texts = detections.detectedItems
+                if (texts.size() != 0) {
+                    var textOutput = ""
+                    for (index in 0 until texts.size()) {
+                        val text = texts[index]
+                        if (text != null) {
+                            textOutput += "$index: ${text.value}\n"
                         }
-                        txtBarCode.post {
-                            txtBarCode.text = text
-                        }
+                    }
+
+                    txtBarCode.post {
+                        txtBarCode.text = textOutput
                     }
                 }
             }
