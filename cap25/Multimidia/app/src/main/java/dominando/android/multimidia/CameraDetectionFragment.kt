@@ -1,5 +1,6 @@
 package dominando.android.multimidia
 
+//import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,24 +9,44 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
-import com.google.android.gms.vision.barcode.Barcode
-import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.android.gms.vision.face.Face
+import com.google.android.gms.vision.face.FaceDetector
 import kotlinx.android.synthetic.main.fragment_camera_detection.*
 import java.io.IOException
 
 class CameraDetectionFragment : MultimidiaFragment() {
 
-    private val detector: BarcodeDetector by lazy {
-        BarcodeDetector.Builder(activity).setBarcodeFormats(Barcode.ALL_FORMATS).build()
+    //region Barcode Detector
+//    private val detector: BarcodeDetector by lazy {
+//        BarcodeDetector.Builder(activity).setBarcodeFormats(Barcode.ALL_FORMATS).build()
+//    }
+//
+//    private val cameraSource: CameraSource by lazy {
+//        CameraSource.Builder(activity, detector)
+//            .setFacing(CameraSource.CAMERA_FACING_BACK)
+//            .setAutoFocusEnabled(true)
+//            .setRequestedPreviewSize(800, 512)
+//            .build()
+//    }
+    //endregion
+
+    //region FaceDetector
+    private val detector: FaceDetector by lazy {
+        FaceDetector.Builder(activity)
+            .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+            .setMode(FaceDetector.ACCURATE_MODE)
+            .setProminentFaceOnly(false)
+            .build()
     }
 
     private val cameraSource: CameraSource by lazy {
         CameraSource.Builder(activity, detector)
-            .setFacing(CameraSource.CAMERA_FACING_BACK)
+            .setFacing(CameraSource.CAMERA_FACING_FRONT)
             .setAutoFocusEnabled(true)
             .setRequestedPreviewSize(800, 512)
             .build()
     }
+    //endregion
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,20 +89,49 @@ class CameraDetectionFragment : MultimidiaFragment() {
         }
     }
 
+    //region initProcessor Barcode
+//    private fun initProcessor() {
+//        detector.setProcessor(object : Detector.Processor<Barcode> {
+//            override fun release() {}
+//
+//            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
+//                val barCodes = detections.detectedItems
+//                if (barCodes.size() != 0) {
+//                    txtBarCode.post {
+//                        txtBarCode.text = barCodes.valueAt(0).displayValue
+//                    }
+//                }
+//            }
+//        })
+//    }
+    //endregion
+
+    //region initProcessor Face
     private fun initProcessor() {
-        detector.setProcessor(object : Detector.Processor<Barcode> {
+        detector.setProcessor(object : Detector.Processor<Face> {
             override fun release() {}
 
-            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
-                val barCodes = detections.detectedItems
-                if (barCodes.size() != 0) {
-                    txtBarCode.post {
-                        txtBarCode.text = barCodes.valueAt(0).displayValue
+            override fun receiveDetections(detections: Detector.Detections<Face>) {
+                val faces = detections.detectedItems
+                if (faces.size() != 0) {
+                    var text = ""
+                    for (index in 0 until faces.size()) {
+                        val face = faces[index]
+                        if (face != null) {
+                            text += "Face: ${face.id}\n" +
+                                    "Smiling: ${face.isSmilingProbability}\n" +
+                                    "RightEye: ${face.isRightEyeOpenProbability}\n" +
+                                    "LeftEye: ${face.isLeftEyeOpenProbability}"
+                        }
+                        txtBarCode.post {
+                            txtBarCode.text = text
+                        }
                     }
                 }
             }
         })
     }
+    //endregion
 
     private fun startDetection() {
         if (hasPermission()) {
