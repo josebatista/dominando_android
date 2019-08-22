@@ -1,8 +1,8 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragmentVideo"
-    class="dominando.android.multimidia.CameraDetectionFragment"
+    class="dominando.android.multimidia.RecordAudioFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout="@layout/fragment_camera_detection" />
+    tools:layout="@layout/fragment_record_audio" />
 
