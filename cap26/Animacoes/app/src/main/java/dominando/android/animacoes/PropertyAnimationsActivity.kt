@@ -40,7 +40,8 @@ class PropertyAnimationsActivity : AppCompatActivity() {
     private fun executeAnimator() {
         val animationIndex = spnAnimators.selectedItemPosition
         val interpolator = listInterpolators[spnInterpolators.selectedItemPosition]
-        executeViewPropertyAnimation(animationIndex, interpolator)
+//        executeViewPropertyAnimation(animationIndex, interpolator)
+        executeObjectAnimator(animationIndex, interpolator)
     }
 
     private fun executeViewPropertyAnimation(index: Int, interpolator: Interpolator) {
@@ -102,6 +103,53 @@ class PropertyAnimationsActivity : AppCompatActivity() {
                         .start()
                 }
         }
+    }
+
+    private fun executeObjectAnimator(index: Int, interpolator: Interpolator) {
+        val animList = mutableListOf<Animator>()
+
+        val alphaAnim = ObjectAnimator.ofFloat(imgBazinga, View.ALPHA, 0f).apply {
+            duration = ANIMATION_DURATION
+            repeatCount = 1
+            repeatMode = ValueAnimator.REVERSE
+        }
+        animList.add(alphaAnim)
+
+        val rotateAnim = ObjectAnimator.ofFloat(imgBazinga, View.ROTATION, 360f).apply {
+            duration = ANIMATION_DURATION
+            repeatCount = 1
+            repeatMode = ValueAnimator.REVERSE
+        }
+        animList.add(rotateAnim)
+
+        val scaleX = ObjectAnimator.ofFloat(imgBazinga, View.SCALE_X, 2f).apply {
+            duration = ANIMATION_DURATION
+            repeatCount = 1
+            repeatMode = ValueAnimator.REVERSE
+        }
+        val scaleY = ObjectAnimator.ofFloat(imgBazinga, View.SCALE_Y, 2f).apply {
+            duration = ANIMATION_DURATION
+            repeatCount = 1
+            repeatMode = ValueAnimator.REVERSE
+        }
+        val set = AnimatorSet()
+        set.playTogether(scaleX, scaleY)
+        animList.add(set)
+
+        val transAnim = ObjectAnimator.ofFloat(imgBazinga, View.TRANSLATION_X, 0f, 500f).apply {
+            duration = ANIMATION_DURATION
+            repeatCount = 1
+            repeatMode = ValueAnimator.REVERSE
+        }
+        animList.add(transAnim)
+
+        val allTogether = AnimatorSet()
+        allTogether.playTogether(alphaAnim, rotateAnim, set, transAnim)
+        animList.add(allTogether)
+
+        animList[index].interpolator = interpolator
+        animList[index].start()
+
     }
 
     companion object {
