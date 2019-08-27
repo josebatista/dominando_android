@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        startActivity(Intent(this, ViewAnimationsActivity::class.java))
-        startActivity(Intent(this, PropertyAnimationsActivity::class.java))
+//        startActivity(Intent(this, PropertyAnimationsActivity::class.java))
+        startActivity(Intent(this, SpriteActivity::class.java))
     }
 }
