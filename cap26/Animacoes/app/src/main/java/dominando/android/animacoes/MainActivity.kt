@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, ViewAnimationsActivity::class.java))
+//        startActivity(Intent(this, ViewAnimationsActivity::class.java))
+        startActivity(Intent(this, PropertyAnimationsActivity::class.java))
     }
 }
