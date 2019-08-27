@@ -1,9 +1,6 @@
 package dominando.android.animacoes
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.os.Bundle
 import android.view.View
 import android.view.animation.*
@@ -41,7 +38,8 @@ class PropertyAnimationsActivity : AppCompatActivity() {
         val animationIndex = spnAnimators.selectedItemPosition
         val interpolator = listInterpolators[spnInterpolators.selectedItemPosition]
 //        executeViewPropertyAnimation(animationIndex, interpolator)
-        executeObjectAnimator(animationIndex, interpolator)
+//        executeObjectAnimator(animationIndex, interpolator)
+        executeObjectAnimatorFromXml(animationIndex, interpolator)
     }
 
     private fun executeViewPropertyAnimation(index: Int, interpolator: Interpolator) {
@@ -148,6 +146,21 @@ class PropertyAnimationsActivity : AppCompatActivity() {
         animList.add(allTogether)
 
         animList[index].interpolator = interpolator
+        animList[index].start()
+
+    }
+
+    private fun executeObjectAnimatorFromXml(index: Int, interpolator: Interpolator) {
+        val animList = listOf(
+            AnimatorInflater.loadAnimator(this, R.animator.fade),
+            AnimatorInflater.loadAnimator(this, R.animator.rotation),
+            AnimatorInflater.loadAnimator(this, R.animator.scale),
+            AnimatorInflater.loadAnimator(this, R.animator.translate),
+            AnimatorInflater.loadAnimator(this, R.animator.all_together)
+        )
+
+        animList[index].interpolator = interpolator
+        animList[index].setTarget(imgBazinga)
         animList[index].start()
 
     }
