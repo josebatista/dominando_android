@@ -36,4 +36,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bazinga" />
 
+    <TextView
+        android:id="@+id/txtArgb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#FFF"
+        android:text="ARGB Evaluator"
+        android:textColor="#000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

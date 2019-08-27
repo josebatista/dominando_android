@@ -1,6 +1,7 @@
 package dominando.android.animacoes
 
 import android.animation.*
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.*
@@ -32,6 +33,7 @@ class PropertyAnimationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_property_animations)
         imgBazinga.setOnClickListener { executeAnimator() }
+        txtArgb.setOnClickListener { animateText() }
     }
 
     private fun executeAnimator() {
@@ -163,6 +165,26 @@ class PropertyAnimationsActivity : AppCompatActivity() {
         animList[index].setTarget(imgBazinga)
         animList[index].start()
 
+    }
+
+    private fun animateText() {
+        val textColorAnim =
+            ObjectAnimator.ofArgb(txtArgb, "textColor", Color.BLACK, Color.WHITE).apply {
+                duration = ANIMATION_DURATION
+                repeatCount = 1
+                repeatMode = ValueAnimator.REVERSE
+            }
+
+        val bgColorAnim =
+            ObjectAnimator.ofArgb(txtArgb, "backgroundColor", Color.WHITE, Color.RED).apply {
+                duration = ANIMATION_DURATION
+                repeatCount = 1
+                repeatMode = ValueAnimator.REVERSE
+            }
+
+        val set = AnimatorSet()
+        set.playTogether(textColorAnim, bgColorAnim)
+        set.start()
     }
 
     companion object {
