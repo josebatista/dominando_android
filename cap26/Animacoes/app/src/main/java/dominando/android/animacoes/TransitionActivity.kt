@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_transition.*
 
-class TransitionActivity : AppCompatActivity() {
+class TransitionActivity : BaseActivity() {
 
     private var fieldsVisible = true
 

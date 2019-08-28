@@ -8,10 +8,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_layout_changes.*
 
-class LayoutChangesActivity : AppCompatActivity() {
+class LayoutChangesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

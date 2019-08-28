@@ -2,13 +2,12 @@ package dominando.android.animacoes
 
 import android.os.Bundle
 import android.view.animation.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import kotlinx.android.synthetic.main.activity_view_animations.*
 
-class ViewAnimationsActivity : AppCompatActivity() {
+class ViewAnimationsActivity : BaseActivity() {
 
     private val animations: Array<Animation> by lazy {
         initAnimations()

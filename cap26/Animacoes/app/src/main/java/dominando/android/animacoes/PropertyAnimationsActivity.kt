@@ -5,20 +5,19 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import kotlinx.android.synthetic.main.activity_property_animations.*
 
-class PropertyAnimationsActivity : AppCompatActivity() {
+class PropertyAnimationsActivity : BaseActivity() {
 
     private val listInterpolators = arrayOf(
         AccelerateDecelerateInterpolator(),
         AccelerateInterpolator(1.0f), // <- fator opcional
         AnticipateInterpolator(2.0f), // -< fator opcional
         AnticipateOvershootInterpolator(2.0f, 1.5f), // <- tensao, tensao extra
-                                                                        // tension opcional
+        // tension opcional
         BounceInterpolator(),
         CycleInterpolator(2f), // <- ciclos
         DecelerateInterpolator(1.0f), // <- fator opcional
