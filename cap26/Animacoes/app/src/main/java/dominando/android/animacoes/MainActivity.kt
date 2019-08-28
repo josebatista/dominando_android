@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 //        startActivity(Intent(this, ViewAnimationsActivity::class.java))
 //        startActivity(Intent(this, PropertyAnimationsActivity::class.java))
 //        startActivity(Intent(this, SpriteActivity::class.java))
-        startActivity(Intent(this, LayoutChangesActivity::class.java))
+//        startActivity(Intent(this, LayoutChangesActivity::class.java))
+        startActivity(Intent(this, TransitionActivity::class.java))
     }
 }
