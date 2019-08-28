@@ -1,5 +1,6 @@
 package dominando.android.animacoes
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
@@ -39,9 +40,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showActivity(position: Int) {
         val key = options.keys.toList()[position]
-        startActivity(Intent(this, options[key]))
+
+        //animando utilizando ActivityOptions
+        val animation = ActivityOptions.makeCustomAnimation(
+            this, R.anim.slide_left_in, R.anim.slide_left_out
+        ).toBundle()
+
+        startActivity(Intent(this, options[key]), animation)
 
         //aplicar animacao na transicao das telas
-        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
+//        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
     }
 }

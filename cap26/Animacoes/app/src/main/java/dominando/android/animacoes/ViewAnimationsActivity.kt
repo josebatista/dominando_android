@@ -1,5 +1,7 @@
 package dominando.android.animacoes
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.*
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator
@@ -32,6 +34,12 @@ class ViewAnimationsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_animations)
         btnPLay.setOnClickListener { executeAnimation() }
+        imgBazinga.setOnClickListener { view ->
+            val animation = ActivityOptions.makeScaleUpAnimation(
+                view, 0, 0, view.width, view.height
+            ).toBundle()
+            startActivity(Intent(this, LayoutChangesActivity::class.java), animation)
+        }
     }
 
     private fun initAnimations(): Array<Animation> {
