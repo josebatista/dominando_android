@@ -135,6 +135,7 @@ class HotelActivity : BaseActivity(),
 
         supportFragmentManager
             .beginTransaction()
+            .setCustomAnimations(R.anim.enter_hotel_details, R.anim.exit_hotel_details)
             .replace(
                 R.id.details, fragment,
                 HotelDetailsFragment.TAG_DETAILS
