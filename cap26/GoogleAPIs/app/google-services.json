@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "82254768065",
+    "firebase_url": "https://dominando-android-3-243701.firebaseio.com",
+    "project_id": "dominando-android-3-243701",
+    "storage_bucket": "dominando-android-3-243701.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82254768065:android:7594fe2301977e8c",
+        "android_client_info": {
+          "package_name": "dominando.android.hotel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82254768065-bmcgd6shh596r8jl6ebf4v25epjoegrf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dominando.android.hotel",
+            "certificate_hash": "e9e06629871344afb8b1e96bec9620da7f0f2817"
+          }
+        },
+        {
+          "client_id": "82254768065-e4nfsft0n6f01gncbh53kj86d5bcal80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdPDQBWtlUEAnf-ZSnWDQzN8bXtBLilso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82254768065-e4nfsft0n6f01gncbh53kj86d5bcal80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
