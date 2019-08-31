@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ViewAnimationsActivity">
+
+    <Spinner
+        android:id="@+id/spnAnimations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/view_animations" />
+
+    <Spinner
+        android:id="@+id/spnIterpolators"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/interpolators" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F0F0F0">
+
+        <ImageView
+            android:id="@+id/imgBazinga"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/bazinga" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btnPLay"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="Play!" />
+
+
+</LinearLayout>
