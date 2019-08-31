@@ -14,6 +14,7 @@ class PagerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val tabsPagerAdapter = TabsPagerAdapter(this, supportFragmentManager)
         viewPager.adapter = tabsPagerAdapter
+        viewPager.setPageTransformer(true, ZoomPageTransformer())
     }
 
 }
