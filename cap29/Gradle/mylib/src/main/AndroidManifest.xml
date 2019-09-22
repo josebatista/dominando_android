@@ -3,7 +3,7 @@
     package="dominando.android.mylib">
 
     <application>
-        <activity android:name=".LibActivity"></activity>
+        <activity android:name=".LibActivity" />
     </application>
 
 </manifest>
