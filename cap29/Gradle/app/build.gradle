@@ -21,6 +21,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/kotlin']
+            res.srcDirs = [
+                    'src/main/res-app/products',
+                    'src/main/res-app/users',
+                    'src/main/res-app/suggestions',
+                    'src/main/res'
+            ]
+            //Se precisar muda o local do AndroidManifest.xml
+            manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+        }
+    }
+
 }
 
 dependencies {
