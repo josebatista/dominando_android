@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        button.text = "${Helper.message} ${getString(R.string.msg_text)}"
+
         button.setOnClickListener {
             startActivity(Intent(this, LibActivity::class.java))
         }
