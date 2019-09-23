@@ -1,0 +1,2 @@
+include ':app', ':mylib'
+rootProject.name='Gradle'
