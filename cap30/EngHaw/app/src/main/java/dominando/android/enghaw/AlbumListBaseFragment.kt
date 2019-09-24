@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-class AlbumListBaseFragment : Fragment(), CoroutineScope {
+abstract class AlbumListBaseFragment : Fragment(), CoroutineScope {
     private lateinit var job: Job
 
     override val coroutineContext: CoroutineContext
