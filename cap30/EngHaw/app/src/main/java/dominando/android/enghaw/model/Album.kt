@@ -13,7 +13,7 @@ class Album(
     val cover: String,
 
     @SerializedName("capa_big")
-    val coveBigr: String,
+    val coveBig: String,
 
     @SerializedName("ano")
     val year: Int,
