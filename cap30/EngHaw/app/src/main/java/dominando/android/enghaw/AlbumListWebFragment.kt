@@ -1,8 +1,11 @@
 package dominando.android.enghaw
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -68,7 +71,14 @@ class AlbumListWebFragment : AlbumListBaseFragment() {
 
     private fun onItemClick(v: View, album: Album, position: Int) {
         context?.run {
-            DetailsActivity.start(this, album)
+            //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+            //DetailsActivity.start(this, album)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity())
+            val intent = Intent(this, DetailsActivity::class.java).apply {
+                putExtra(DetailsActivity.EXTRA_ALBUM, album)
+            }
+            ActivityCompat.startActivity(this, intent, options.toBundle())
         }
     }
 
