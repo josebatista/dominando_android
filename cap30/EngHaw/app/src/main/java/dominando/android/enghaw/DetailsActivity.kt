@@ -2,16 +2,23 @@ package dominando.android.enghaw
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.transition.Transition
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import dominando.android.enghaw.model.Album
 import dominando.android.enghaw.model.AlbumHttp
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.content_details.*
 
 class DetailsActivity : AppCompatActivity() {
+
+    private var coverTarget: Target? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +30,75 @@ class DetailsActivity : AppCompatActivity() {
             loadCover(album)
             initTitleBar(album.title)
             fillFields(album)
+            initEnterAnimation(album)
         }
     }
 
+    override fun onBackPressed() {
+        fabFavorite.animate()
+            .scaleX(0f)
+            .scaleY(0f)
+            .setDuration(100L)
+            .withEndAction {
+                val params = fabFavorite.layoutParams as? CoordinatorLayout.LayoutParams
+                if (params != null) {
+                    params.behavior = null
+                    fabFavorite.requestLayout()
+                }
+                super.onBackPressed()
+            }
+    }
+
+    private fun initEnterAnimation(album: Album) {
+        imgCover.transitionName = "cover${album.title}"
+        txtTitle.transitionName = "title${album.title}"
+        txtYear.transitionName = "year${album.title}"
+        postponeEnterTransition()
+    }
+
     private fun loadCover(album: Album) {
-        Picasso.get().load(AlbumHttp.BASE_URL + album.coveBig).into(imgCover)
+        coverTarget = object : Target {
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                imgCover.setImageBitmap(bitmap)
+                startEnterAnimation()
+            }
+
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                startEnterAnimation()
+            }
+
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+        }.apply {
+            Picasso.get().load(AlbumHttp.BASE_URL + album.coveBig).into(this)
+        }
+
+    }
+
+    private fun startEnterAnimation() {
+        imgCover.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                imgCover.viewTreeObserver.removeOnPreDrawListener(this)
+                startPostponedEnterTransition()
+                window.enterTransition.addListener(object : Transition.TransitionListener {
+                    override fun onTransitionStart(transition: Transition?) {
+                        fabFavorite.scaleX = 0f
+                        fabFavorite.scaleY = 0f
+                    }
+
+                    override fun onTransitionEnd(transition: Transition?) {
+                        fabFavorite.animate()
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .duration = 100L
+                    }
+
+                    override fun onTransitionResume(transition: Transition?) {}
+                    override fun onTransitionPause(transition: Transition?) {}
+                    override fun onTransitionCancel(transition: Transition?) {}
+                })
+                return true
+            }
+        })
     }
 
     private fun initTitleBar(title: String) {

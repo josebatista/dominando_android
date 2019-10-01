@@ -37,6 +37,9 @@ class AlbumAdapter(
             Picasso.get().load(AlbumHttp.BASE_URL + album.cover).into(imgCover)
             txtTitle?.text = album.title
             txtYear?.text = album.year.toString()
+            imgCover?.transitionName = "cover${album.title}"
+            txtTitle?.transitionName = "title${album.title}"
+            txtYear?.transitionName = "year${album.title}"
         }
     }
 

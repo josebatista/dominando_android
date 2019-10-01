@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dominando.android.enghaw.model.Album
 import dominando.android.enghaw.model.AlbumHttp
 import kotlinx.android.synthetic.main.album_list.*
+import kotlinx.android.synthetic.main.item_album.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -74,7 +76,12 @@ class AlbumListWebFragment : AlbumListBaseFragment() {
             //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
             //DetailsActivity.start(this, album)
 
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity())
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                requireActivity(),
+                Pair.create(v.imgCover, "cover${album.title}"),
+                Pair.create(v.txtTitle, "title${album.title}"),
+                Pair.create(v.txtYear, "year${album.title}")
+            )
             val intent = Intent(this, DetailsActivity::class.java).apply {
                 putExtra(DetailsActivity.EXTRA_ALBUM, album)
             }

@@ -10,8 +10,8 @@
 
     <style name="AppTheme" parent="BaseTheme">
         <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowEnterTransition">@android:transition/explode</item>
-        <item name="android:windowExitTransition">@android:transition/explode</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
         <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:navigationBarColor">@color/primary_dark</item>
         <item name="android:colorActivatedHighlight">@color/primary_selection</item>
