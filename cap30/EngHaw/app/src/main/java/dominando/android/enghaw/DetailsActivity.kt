@@ -3,12 +3,14 @@ package dominando.android.enghaw
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.Transition
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.palette.graphics.Palette
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import dominando.android.enghaw.model.Album
@@ -60,7 +62,8 @@ class DetailsActivity : AppCompatActivity() {
         coverTarget = object : Target {
             override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                 imgCover.setImageBitmap(bitmap)
-                startEnterAnimation()
+                setUiColors(bitmap)
+                //startEnterAnimation()
             }
 
             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
@@ -71,7 +74,37 @@ class DetailsActivity : AppCompatActivity() {
         }.apply {
             Picasso.get().load(AlbumHttp.BASE_URL + album.coveBig).into(this)
         }
+    }
 
+    private fun setUiColors(bitmap: Bitmap?) {
+        if (bitmap == null) {
+            startEnterAnimation()
+            return
+        }
+
+        Palette.from(bitmap).generate { palette ->
+            palette?.let {
+                val vibrantColor = palette.getVibrantColor(Color.BLACK)
+                val darkVibrantColor = palette.getDarkVibrantColor(Color.BLACK)
+                val darkMutedColor = palette.getDarkMutedColor(Color.BLACK)
+                val lightMutedColor = palette.getLightMutedColor(Color.BLACK)
+
+                txtTitle.setTextColor(vibrantColor)
+                if (appBar != null) {
+                    appBar?.setBackgroundColor(vibrantColor)
+                } else {
+                    toolbar.setBackgroundColor(Color.TRANSPARENT)
+                }
+
+                window.navigationBarColor = darkMutedColor
+                if (collapseToolbar != null) {
+                    collapseToolbar?.setStatusBarScrimColor(darkMutedColor)
+                    collapseToolbar?.setContentScrimColor(darkVibrantColor)
+                }
+                coordinatorLayout?.setBackgroundColor(lightMutedColor)
+            }
+            startEnterAnimation()
+        }
     }
 
     private fun startEnterAnimation() {

@@ -41,6 +41,7 @@ dependencies {
 
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
+    implementation "androidx.palette:palette:$palette_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
