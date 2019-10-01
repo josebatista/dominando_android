@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -42,6 +44,10 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
     implementation "androidx.palette:palette:$palette_version"
+
+    implementation "androidx.lifecycle:lifecycle-livedata:$livedata_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
