@@ -2,4 +2,6 @@
     <string name="app_name">Engenheiros do Havaii</string>
     <string name="formation">Formação</string>
     <string name="songs">Músicas</string>
+    <string name="tab_all">Todos os Álbuns</string>
+    <string name="tab_favorites">Favoritos</string>
 </resources>

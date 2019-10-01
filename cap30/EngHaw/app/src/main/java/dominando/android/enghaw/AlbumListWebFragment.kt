@@ -72,12 +72,12 @@ class AlbumListWebFragment : AlbumListBaseFragment() {
     }
 
     private fun onItemClick(v: View, album: Album, position: Int) {
-        context?.run {
+        activity?.run {
             //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
             //DetailsActivity.start(this, album)
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                requireActivity(),
+                this,
                 Pair.create(v.imgCover, "cover${album.title}"),
                 Pair.create(v.txtTitle, "title${album.title}"),
                 Pair.create(v.txtYear, "year${album.title}")
