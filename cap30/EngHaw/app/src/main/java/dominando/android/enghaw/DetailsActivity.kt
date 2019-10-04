@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.transition.Transition
@@ -227,8 +228,13 @@ class DetailsActivity : AppCompatActivity(), CoroutineScope {
         album?.let {
             launch {
                 val isFavorite = withContext(Dispatchers.IO) { repo.isFavorite(it) }
-                fabFavorite.setImageDrawable(getFabIcon(isFavorite))
+                val icon = getFabIcon(isFavorite)
+                fabFavorite.setImageDrawable(icon)
                 fabFavorite.backgroundTintList = getFabBackground(isFavorite)
+                if (icon is AnimatedVectorDrawable) {
+                    icon.start()
+                }
+
             }
         }
     }
@@ -237,9 +243,9 @@ class DetailsActivity : AppCompatActivity(), CoroutineScope {
         return ContextCompat.getDrawable(
             this,
             if (favorite)
-                R.drawable.ic_clear
+                R.drawable.avd_check
             else
-                R.drawable.ic_check
+                R.drawable.avd_clear
         )
     }
 
