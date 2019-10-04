@@ -2,6 +2,7 @@ package dominando.android.enghaw
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -10,30 +11,54 @@ import android.transition.Transition
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.palette.graphics.Palette
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import dominando.android.enghaw.db.AlbumRepository
 import dominando.android.enghaw.model.Album
 import dominando.android.enghaw.model.AlbumHttp
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.content_details.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class DetailsActivity : AppCompatActivity() {
+class DetailsActivity : AppCompatActivity(), CoroutineScope {
 
     private var coverTarget: Target? = null
+    private var album: Album? = null
+
+    private val repo: AlbumRepository by lazy {
+        AlbumRepository(this)
+    }
+
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
+        job = Job()
+
         val album = intent.getParcelableExtra<Album>(EXTRA_ALBUM)
 
         if (album != null) {
-            loadCover(album)
+            this.album = album
             initTitleBar(album.title)
             fillFields(album)
             initEnterAnimation(album)
+            loadCover(album)
+        } else {
+            finish()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     override fun onBackPressed() {
@@ -176,6 +201,56 @@ class DetailsActivity : AppCompatActivity() {
             sb.append(index + 1).append(". ").append(track)
         }
         txtSongs.text = sb.toString()
+        updateFab()
+        fabFavorite.setOnClickListener {
+            toggleFavorite()
+        }
+    }
+
+    private fun toggleFavorite() {
+        album?.let {
+            launch {
+                withContext(Dispatchers.IO) {
+                    val isFavorite = repo.isFavorite(it)
+                    if (isFavorite) {
+                        repo.delete(it)
+                    } else {
+                        repo.save(it)
+                    }
+                }
+                updateFab()
+            }
+        }
+    }
+
+    private fun updateFab() {
+        album?.let {
+            launch {
+                val isFavorite = withContext(Dispatchers.IO) { repo.isFavorite(it) }
+                fabFavorite.setImageDrawable(getFabIcon(isFavorite))
+                fabFavorite.backgroundTintList = getFabBackground(isFavorite)
+            }
+        }
+    }
+
+    private fun getFabIcon(favorite: Boolean): Drawable? {
+        return ContextCompat.getDrawable(
+            this,
+            if (favorite)
+                R.drawable.ic_clear
+            else
+                R.drawable.ic_check
+        )
+    }
+
+    private fun getFabBackground(favorite: Boolean): ColorStateList? {
+        return ContextCompat.getColorStateList(
+            this,
+            if (favorite)
+                R.color.bg_fab_clear
+            else
+                R.color.bg_fab_favorite
+        )
     }
 
     companion object {
