@@ -61,6 +61,9 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mokito_kotlin_version"
     testImplementation "org.assertj:assertj-core:$assertj_version"
     testImplementation "androidx.arch.core:core-testing:$android_arch_test"
+
+    androidTestImplementation "androidx.test.ext:junit:$testrunner_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$android_arch_test"
     androidTestImplementation "androidx.test:runner:$testrunner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }
