@@ -64,7 +64,7 @@ dependencies {
 
     androidTestImplementation "androidx.test.ext:junit:$testrunner_version"
     androidTestImplementation "androidx.arch.core:core-testing:$android_arch_test"
-    androidTestImplementation "androidx.test:runner:$testrunner_version"
+    androidTestImplementation "androidx.test:rules:$testrules_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "org.hamcrest:hamcrest-integration:${hamcrest_version}"
 }

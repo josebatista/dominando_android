@@ -24,6 +24,7 @@ buildscript {
         playservices_version = "17.0.0"
         retrofit_version = "2.5.0"
         room_version = '2.1.0'
+        testrules_version = '1.1.1'
         testrunner_version = '1.1.1'
         workmanager_version = '2.2.0'
     }
