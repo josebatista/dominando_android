@@ -66,6 +66,7 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$android_arch_test"
     androidTestImplementation "androidx.test:runner:$testrunner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "org.hamcrest:hamcrest-integration:${hamcrest_version}"
 }
 
 apply plugin: 'com.google.gms.google-services'
