@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
         adapter?.notifyDataSetChanged()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putStringArrayList(BUNDLE_KEY, names)
+        outState.putStringArrayList(BUNDLE_KEY, names)
     }
 }
