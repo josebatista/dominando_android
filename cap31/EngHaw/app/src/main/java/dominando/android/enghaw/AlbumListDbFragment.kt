@@ -56,12 +56,14 @@ class AlbumListDbFragment : AlbumListBaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         launch {
+            IdleResource.instance.increment()
             albumList = withContext(Dispatchers.IO) { repo.loadFavorites() }
             albumList?.observe(this@AlbumListDbFragment, Observer { albums ->
                 if (albums != null) {
                     updateList(albums)
                 }
             })
+            IdleResource.instance.decrement()
         }
     }
 
