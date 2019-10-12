@@ -11,6 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import dominando.android.hotel.RatingBarAction.Companion.setRating
+import dominando.android.hotel.RatingBarMatcher.Companion.withRatingValue
 import dominando.android.hotel.common.HotelActivity
 import dominando.android.hotel.repository.HotelRepository
 import dominando.android.hotel.repository.room.HotelDatabase
@@ -52,16 +54,17 @@ class HotelCurdTest {
 
     private fun add() {
         onView(withId(R.id.fabAdd)).perform(click())
-        fillHotelForm(NEW_HOTEL_NAME, NEW_HOTEL_ADDRESS)
+        fillHotelForm(NEW_HOTEL_NAME, NEW_HOTEL_ADDRESS, NEW_HOTEL_RATING)
         listViewHasHotelWithName(NEW_HOTEL_NAME)
     }
 
     private fun edit() {
         clickOnHotelName(NEW_HOTEL_NAME)
         onView(withId(R.id.action_edit)).perform(click())
-        fillHotelForm(CHANGED_HOTEL_NAME, CHANGED_HOTEL_ADDRESS)
+        fillHotelForm(CHANGED_HOTEL_NAME, CHANGED_HOTEL_ADDRESS, CHANGED_HOTEL_RATING)
         onView(withId(R.id.txtName)).check(matches(withText(CHANGED_HOTEL_NAME)))
         onView(withId(R.id.txtAddress)).check(matches(withText(CHANGED_HOTEL_ADDRESS)))
+        onView(withId(R.id.rtbRating)).check(matches(withRatingValue(CHANGED_HOTEL_RATING)))
         pressBack()
         listViewHasHotelWithName(CHANGED_HOTEL_NAME)
     }
@@ -72,10 +75,10 @@ class HotelCurdTest {
         onView(withId(R.id.action_delete)).perform(click())
     }
 
-    private fun fillHotelForm(name: String, address: String) {
+    private fun fillHotelForm(name: String, address: String, rating: Float) {
         onView(withId(R.id.edtName)).perform(replaceText(name))
-        onView(withId(R.id.edtName)).perform(pressImeActionButton())
         onView(withId(R.id.edtAddress)).perform(replaceText(address))
+        onView(withId(R.id.rtbRating)).perform(setRating(rating))
         onView(withId(R.id.edtAddress)).perform(pressImeActionButton())
         closeSoftKeyboard()
     }
@@ -98,9 +101,10 @@ class HotelCurdTest {
     companion object {
         private const val NEW_HOTEL_NAME = "Hotel de Teste"
         private const val NEW_HOTEL_ADDRESS = "Rua tal"
+        private const val NEW_HOTEL_RATING = 3.5f
         private const val CHANGED_HOTEL_NAME = "Hotel modificado"
         private const val CHANGED_HOTEL_ADDRESS = "Rua modificada"
-
+        private const val CHANGED_HOTEL_RATING = 4.5f
     }
 
 }
